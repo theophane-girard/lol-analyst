@@ -1,0 +1,9 @@
+<p>
+  Liste des parties
+</p>
+
+<ul>
+  <li *ngFor="let match of matchesToCSV">
+    {{match.date + ';' + match.day + ';' + match.hour + ';' + match.win + ';' + match.gameNumber}}
+  </li>
+</ul>
