@@ -22,7 +22,7 @@ const routes: Routes = [
     BrowserModule,
     AppRoutingModule,
     MatchesModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     HttpClientModule,
   ],
   exports: [
