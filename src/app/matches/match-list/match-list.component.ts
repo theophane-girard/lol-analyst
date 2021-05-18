@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchesService } from '../services/matches.service';
-import {} from "riot-games-api";
 import { MatchToCSV } from '../models/match-to-csv';
 import { CONFIG } from 'src/config/config';
 import { formatDate } from "@angular/common";
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { CREDENTIALS } from 'src/config/credentials';
 registerLocaleData(localeFr);
 
 @Component({
@@ -14,8 +14,8 @@ registerLocaleData(localeFr);
   styleUrls: ['./match-list.component.scss']
 })
 export class MatchListComponent implements OnInit {
-  CONFIG = CONFIG
-  matches: RiotGamesAPI.Match.MatchDetail[] = []
+  CREDENTIALS = CREDENTIALS
+  matches: RiotGames.Match.MatchDetail[] = []
   matchesToCSV: MatchToCSV[] = []
 
   constructor(private matchService: MatchesService) { }
@@ -24,35 +24,24 @@ export class MatchListComponent implements OnInit {
     this.matchService.matches$.subscribe(matches => this.generateCSVData(matches))
   }
 
-  generateCSVData(matches: RiotGamesAPI.Match.MatchDetail[]): void {
+  generateCSVData(matches: RiotGames.Match.MatchDetail[]): void {
     this.matches = matches
-    this.matches.forEach(match => {
-      let sum = match.participantIdentities.find(p => p.player.summonerName === this.CONFIG.summonerName)
-      let date = new Date(match.gameCreation)
-      let partId: number = sum.participantId
-      let matchToCSV: MatchToCSV = {
-        date: formatDate(date, 'dd/MM/yyyy', 'fr-FR'),
-        day: this.CONFIG.daysOfWeek[date.getDay()],
-        hour: formatDate(date, 'HH:mm:00', 'fr-FR'),
-        win: this.formatWin(match.teams.find(team => team.teamId === match.participants.find(p => p.participantId === partId).teamId).win),
-        gameNumber: this.getGameNumber(match, matches, date)
-      }
-      this.matchesToCSV.push(matchToCSV)
-    });
-    
+    this.matches.forEach(match => this.pushToMatchesCSV(match, matches));
     this.matchesToCSV = this.matchesToCSV.sort((a,b) => this.sortByDateAndGameNumber(a, b))
   }
-  getGameNumber(match: RiotGamesAPI.Match.MatchDetail, matches: RiotGamesAPI.Match.MatchDetail[], date: Date): number {
-    let dayMatches = matches.filter(m => (new Date(m.gameCreation)).getDate() === date.getDate()).sort((a, b) => a.gameCreation - b.gameCreation)
+
+  getGameNumber(
+    match: RiotGames.Match.MatchDetail, 
+    matches: RiotGames.Match.MatchDetail[], 
+    date: Date
+  ): number {
+    let dayMatches = matches.filter(m => (new Date(m.gameCreation)).getDate() === date.getDate())
+    dayMatches = dayMatches.sort((a, b) => a.gameCreation - b.gameCreation)
     return dayMatches.indexOf(match) + 1
   }
 
   formatWin(winner: string): string {
-    if (winner === 'Win') {
-      return 'V'
-    } else {
-      return 'D'
-    }
+    return CONFIG.win[winner]
   }
 
   sortByDateAndGameNumber(a, b) {
@@ -67,6 +56,23 @@ export class MatchListComponent implements OnInit {
     if (p1 < p2) return -1;
     if (p1 > p2) return 1;
     return 0;
+  }
+
+  pushToMatchesCSV(match: RiotGames.Match.MatchDetail, matches: RiotGames.Match.MatchDetail[]) {
+    let summonerToMap = match.participantIdentities.find(p => p.player.summonerName === CREDENTIALS.summonerName)
+    let date = new Date(match.gameCreation)
+    let summonerParticipantId: number = summonerToMap.participantId
+    let participant = match.participants.find(p => p.participantId === summonerParticipantId)
+    let win = match.teams.find(team => team.teamId === participant.teamId).win
+
+    let matchToCSV: MatchToCSV = {
+      date: formatDate(date, 'dd/MM/yyyy', CONFIG.locale),
+      day: CONFIG.daysOfWeek[date.getDay()],
+      hour: formatDate(date, 'HH:mm:00', CONFIG.locale),
+      win: this.formatWin(win),
+      gameNumber: this.getGameNumber(match, matches, date)
+    }
+    this.matchesToCSV.push(matchToCSV)
   }
 
 }
