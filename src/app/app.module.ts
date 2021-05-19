@@ -8,6 +8,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatchListComponent } from './matches/match-list/match-list.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RequestInterceptor } from './core/service/RequestInterceptor.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
   { path: '', component: MatchListComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
     MatchesModule,
     RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     HttpClientModule,
+    BrowserAnimationsModule,
   ],
   exports: [
     RouterModule,
