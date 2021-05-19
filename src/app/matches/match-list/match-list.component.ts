@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchesService } from '../services/matches.service';
 import { MatchToCSV } from '../models/match-to-csv';
-import { CONFIG } from 'src/config/config';
-import { formatDate } from "@angular/common";
-import { registerLocaleData } from '@angular/common';
+import { CONFIG } from '../../../config/config';
+import { formatDate, registerLocaleData} from "@angular/common";
+import { CREDENTIALS } from '../../../config/credentials';
 import localeFr from '@angular/common/locales/fr';
-import { CREDENTIALS } from 'src/config/credentials';
+import { RiotGames } from '../../../types/riot-games/riot-games';
+
 registerLocaleData(localeFr);
 
 @Component({
@@ -45,11 +46,10 @@ export class MatchListComponent implements OnInit {
   }
 
   sortByDateAndGameNumber(a, b) {
-    var o1 = a.date;
-    var o2 = b.date;
-
-    var p1 = a.gameNumber;
-    var p2 = b.gameNumber;
+    let o1 = a.date;
+    let o2 = b.date;
+    let p1 = a.gameNumber;
+    let p2 = b.gameNumber;
 
     if (o1 < o2) return -1;
     if (o1 > o2) return 1;

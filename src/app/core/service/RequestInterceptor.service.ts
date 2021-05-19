@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpEvent, HttpResponse, HttpRequest, HttpHandler } from '@angular/common/http';
+import { HttpInterceptor, HttpEvent, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CREDENTIALS } from 'src/config/credentials';
-import { CONFIG } from 'src/config/config';
+import { CREDENTIALS } from '../../../config/credentials';
+import { CONFIG } from '../../../config/config';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {

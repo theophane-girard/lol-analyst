@@ -2,8 +2,10 @@
 // Project: https://developer.riotgames.com/
 // Definitions by: Xavier Stouder <https://github.com/xstoudi>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// declare module 'riot-games' {
 
-declare namespace RiotGames{
+
+export declare namespace RiotGames {
   /**
   * champion-v1.2
   */
@@ -1183,3 +1185,4 @@ declare namespace RiotGames{
       }
   }
 }
+// }
