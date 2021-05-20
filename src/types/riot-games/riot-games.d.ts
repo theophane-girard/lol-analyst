@@ -244,11 +244,20 @@ export declare namespace RiotGames {
   */
   namespace League{
       interface LeagueDto{
-          entries: Array<LeagueEntryDto>,
-          name: string,
-          participantId: string,
-          queue: string,
-          tier: string
+        leagueId:	string,	
+        summonerId:	string,
+        summonerName:	string,	
+        queueType:	string,	
+        tier:	string,	
+        rank:	string,
+        leaguePoints:	number,	
+        wins:	number
+        losses:	number,
+        hotStreak:	boolean,	
+        veteran:	boolean,	
+        freshBlood:	boolean,	
+        inactive:	boolean,	
+        miniSeries:	MiniSeriesDto
       }
       interface LeagueEntryDto{
           division: string,
@@ -945,7 +954,7 @@ export declare namespace RiotGames {
       interface MatchReference{
           champion: number,
           lane: string,
-          matchId: number,
+          gameId: number,
           plateformId: string,
           queue: string,
           region: string,
@@ -1040,15 +1049,17 @@ export declare namespace RiotGames {
   }
 
   /**
-  * summoner-v1.4
+  * summoner-v4
   */
   namespace Summoner{
       interface SummonerDto{
-          id: number,
-          name: string,
-          profileIconId: number,
-          revisionDate: number,
-          summonerLevel: number
+        accountId: string,
+        profileIconId: number,
+        revisionDate: number,
+        name: string,
+        id: string,
+        puuid: string,
+        summonerLevel: number,
       }
       interface MasteryPagesDto{
           pages: Array<MasteryPageDto>,

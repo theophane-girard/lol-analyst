@@ -15,7 +15,7 @@ export class MatchesService {
   public matches$: Subject<RiotGames.Match.MatchDetail[]> = new Subject()
 
   constructor(private http: HttpClient) { 
-    this.getSummoner().pipe(
+    this.getSummoner(CREDENTIALS.summonerName).pipe(
       switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, CONFIG.matchAmount, data)),
       switchMap((response: any) => from(response.matches)),
       concatMap((match: any) => this.getMatchById(match.gameId))
@@ -30,7 +30,7 @@ export class MatchesService {
     let url = CONFIG.apiUrlMatchesByAccountId 
       + account.accountId
 
-    return this.http.get<string[]>(url, { params: param })
+    return this.http.get<RiotGames.MatchList.MatchList>(url, { params: param })
   }
 
   getMatchById(id: number) {
@@ -39,10 +39,16 @@ export class MatchesService {
     return this.http.get<RiotGames.Match.MatchDetail>(url);
   }
 
-  getSummoner() {
-    let url = CONFIG.apiUrlGetSummoner + CREDENTIALS.summonerName
+  getSummoner(summonerName: string) {
+    let url = CONFIG.apiUrlGetSummoner + summonerName
 
-    return this.http.get<string[]>(url);
+    return this.http.get<RiotGames.Summoner.SummonerDto>(url);
+  }
+
+  getSummonerLeague(id: string) {
+    let url = CONFIG.apiUrlGetSummonerLeague + id
+
+    return this.http.get<RiotGames.League.LeagueDto[]>(url);
   }
 
   addMatch(match: RiotGames.Match.MatchDetail) {

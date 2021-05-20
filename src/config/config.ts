@@ -5,11 +5,18 @@ export const CONFIG: any = {
     apiUrlMatchesByAccountId: '/match/v4/matchlists/by-account/',
     apiUrlMatchesById: '/match/v4/matches/',
     apiUrlGetSummoner: '/summoner/v4/summoners/by-name/',
+    apiUrlGetSummonerLeague: '/league/v4/entries/by-summoner/',
     matchAmount: 4,
     matchStartIndex: 0,
     win: {
-        'Win': 'V',
-        'Fail': 'D'
+        'Win': {
+          label: 'V',
+          value: true
+        },
+        'Fail': {
+          label: 'D',
+          value: false
+        }
     },
     daysOfWeek : {
         0: 7,
@@ -20,5 +27,6 @@ export const CONFIG: any = {
         5: 5,
         6: 6,
     },
-    locale: 'fr-FR'
+    locale: 'fr-FR',
+    soloRankedLabel: 'RANKED_SOLO_5x5'
 }
