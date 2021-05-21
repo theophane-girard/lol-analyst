@@ -7,7 +7,7 @@ import { CREDENTIALS } from '../../../config/credentials';
 import localeFr from '@angular/common/locales/fr';
 import { RiotGames } from '../../../types/riot-games/riot-games';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, of, from } from 'rxjs';
+import { Observable, of, from, forkJoin } from 'rxjs';
 import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { Player } from '../models/player';
 import { Match } from '../models/match';
@@ -91,16 +91,17 @@ export class MatchListComponent implements OnInit {
   }
 
   loadPlayerRankedData(players: string): void {
-    let playerNames = players.replace(/ joined the lobby/g, '').split('\n').filter(n => n !== '')
+    let playerNames: string[] = this.getPlayerNames(players)
     if (playerNames.length === 0) {
       console.error('pas de joueur')
       return
     }
-    let currentSummoner: Player
-    let currentMatches: any
-  
-    from(playerNames.filter(name => name !== CREDENTIALS.summonerName)).pipe(
-      concatMap(name => this.matchService.getSummoner(name).pipe(
+    let playerResquests: Observable<any>[] = []
+
+    playerNames.filter(name => name !== CREDENTIALS.summonerName).forEach(name => {
+      let currentSummoner: Player
+      let currentMatches: any
+      let playerRequest$ = this.matchService.getSummoner(name).pipe(
         tap((summoner: RiotGames.Summoner.SummonerDto) => currentSummoner = Player.factory(summoner)),
         switchMap(() => this.matchService.getSummonerLeague(currentSummoner.id)),
         tap((league: RiotGames.League.LeagueDto[]) => currentSummoner.league = league),
@@ -110,11 +111,28 @@ export class MatchListComponent implements OnInit {
         switchMap((matches: any) => from(matches.matches)),
         concatMap((match: any) => this.matchService.getMatchById(match.gameId)),
         map((match: RiotGames.Match.MatchDetail) => this.addToRankedData(match, currentSummoner, currentMatches)))
-      ),
-    ).subscribe(() => this.formatPlayers())
+
+        playerResquests.push(playerRequest$)
+    });
+
+    forkJoin(playerResquests).subscribe(() => this.formatPlayers())
   
     // Nutripax joined the lobby
     // Holcahust joined the lobby
+  }
+  getPlayerNames(players: string) : string[] {
+        
+    let res = players.replace(/ joined the lobby/g, '').split(',').filter(n => n !== '')
+    if (res.length !== 0) {
+      return res
+    }
+  
+    res = players.replace(/ joined the lobby/g, '').split('\n').filter(n => n !== '')
+    if (res.length !== 0) {
+      return res
+    }
+
+    return []
   }
 
   addLeagueData(league: any, currentSummoner: any): Observable<any> {

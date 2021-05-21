@@ -21,7 +21,8 @@
     <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}" class="rankedIcon">
     <ul>
       <li *ngFor="let match of player.matches">
-        {{ match.getKDA(player.name) }}
+        {{ match.gameCreation | date:'dd/MM/yyyy HH:mm:ss'}} => 
+        {{ match.getKDA(player.name) }} =>
         {{ match.getMatchResult(player.name) }}
       </li>
     </ul>
