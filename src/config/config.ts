@@ -6,7 +6,7 @@ export const CONFIG: any = {
     apiUrlMatchesById: '/match/v4/matches/',
     apiUrlGetSummoner: '/summoner/v4/summoners/by-name/',
     apiUrlGetSummonerLeague: '/league/v4/entries/by-summoner/',
-    matchAmount: 4,
+    matchAmount: 7,
     matchStartIndex: 0,
     win: {
         'Win': {

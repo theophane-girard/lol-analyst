@@ -98,7 +98,7 @@ export class MatchListComponent implements OnInit {
     }
     let playerResquests: Observable<any>[] = []
 
-    playerNames.filter(name => name !== CREDENTIALS.summonerName).forEach(name => {
+    playerNames.filter(name => name.replace(/\s/g, '') !== CREDENTIALS.summonerName.replace(/\s/g, '')).forEach(name => {
       let currentSummoner: Player
       let currentMatches: any
       let playerRequest$ = this.matchService.getSummoner(name).pipe(
