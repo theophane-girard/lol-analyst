@@ -1,0 +1,23 @@
+<form [formGroup]="form">
+  <h2>Liste des joueurs</h2>
+  <mat-form-field appearance="fill">
+    <mat-label>Liste des joueurs</mat-label>
+    <textarea formControlName="players" matInput
+      placeholder="Player 1 has joined the lobby Player 2 has joined the lobby..."
+      class="playerListTextArea"></textarea>
+  </mat-form-field>
+</form>
+<ul>
+  <li *ngFor="let player of players">
+    {{player.name + ' => ' + player.winrate + ' => ' + player.getWins() + ';' + player.getLosses() }}
+    <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}"
+      class="rankedIcon">
+    <ul>
+      <li *ngFor="let match of player.matches">
+        {{ match.gameCreation | date:'dd/MM/yyyy HH:mm:ss'}} =>
+        {{ match.getKDA(player.name) }} =>
+        {{ match.getMatchResult(player.name) }}
+      </li>
+    </ul>
+  </li>
+</ul>

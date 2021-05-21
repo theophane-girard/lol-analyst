@@ -11,10 +11,11 @@ import { RequestInterceptor } from './core/service/RequestInterceptor.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
+import { MultipleSearchComponent } from './matches/multiple-search/multiple-search.component';
 
 const routes: Routes = [
   { path: '', component: MatchListComponent },
-  // { path: 'second-component', component: SecondComponent },
+  { path: 'inter-detector', component: MultipleSearchComponent },
 ];
 
 @NgModule({

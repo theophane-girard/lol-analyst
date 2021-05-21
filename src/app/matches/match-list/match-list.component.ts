@@ -6,12 +6,7 @@ import { formatDate, registerLocaleData} from "@angular/common";
 import { CREDENTIALS } from '../../../config/credentials';
 import localeFr from '@angular/common/locales/fr';
 import { RiotGames } from '../../../types/riot-games/riot-games';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, of, from, forkJoin } from 'rxjs';
-import { concatMap, map, switchMap, tap } from 'rxjs/operators';
-import { Player } from '../models/player';
-import { Match } from '../models/match';
-
+import { FormBuilder } from '@angular/forms';''
 registerLocaleData(localeFr);
 
 @Component({
@@ -23,9 +18,6 @@ export class MatchListComponent implements OnInit {
   CREDENTIALS = CREDENTIALS
   matches: RiotGames.Match.MatchDetail[] = []
   matchesToCSV: MatchToCSV[] = []
-  form: FormGroup
-  players: Player[] = []
-  public formattedPlayers: any
 
   constructor(
     private matchService: MatchesService,
@@ -33,11 +25,7 @@ export class MatchListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      players: new FormControl(null, Validators.required)
-    })
     this.matchService.matches$.subscribe(matches => this.generateCSVData(matches))
-    this.form.controls.players.valueChanges.subscribe(players => this.loadPlayerRankedData(players))
   }
 
   generateCSVData(matches: RiotGames.Match.MatchDetail[]): void {
@@ -89,78 +77,4 @@ export class MatchListComponent implements OnInit {
     }
     this.matchesToCSV.push(matchToCSV)
   }
-
-  loadPlayerRankedData(players: string): void {
-    let playerNames: string[] = this.getPlayerNames(players)
-    if (playerNames.length === 0) {
-      console.error('pas de joueur')
-      return
-    }
-    let playerResquests: Observable<any>[] = []
-
-    playerNames.filter(name => name.replace(/\s/g, '') !== CREDENTIALS.summonerName.replace(/\s/g, '')).forEach(name => {
-      let currentSummoner: Player
-      let currentMatches: any
-      let playerRequest$ = this.matchService.getSummoner(name).pipe(
-        tap((summoner: RiotGames.Summoner.SummonerDto) => currentSummoner = Player.factory(summoner)),
-        switchMap(() => this.matchService.getSummonerLeague(currentSummoner.id)),
-        tap((league: RiotGames.League.LeagueDto[]) => currentSummoner.league = league),
-        switchMap(() => of(currentSummoner)),
-        switchMap(summoner => this.matchService.getLastMatchIdList(CONFIG.matchStartIndex, CONFIG.matchAmount, summoner)),
-        tap((matches: RiotGames.MatchList.MatchList) => currentMatches = matches.matches),
-        switchMap((matches: any) => from(matches.matches)),
-        concatMap((match: any) => this.matchService.getMatchById(match.gameId)),
-        map((match: RiotGames.Match.MatchDetail) => this.addToRankedData(match, currentSummoner, currentMatches)))
-
-        playerResquests.push(playerRequest$)
-    });
-
-    forkJoin(playerResquests).subscribe(() => this.formatPlayers())
-  
-    // Nutripax joined the lobby
-    // Holcahust joined the lobby
-  }
-  getPlayerNames(players: string) : string[] {
-        
-    let res = players.replace(/ joined the lobby/g, '').split(',').filter(n => n !== '')
-    if (res.length !== 0) {
-      return res
-    }
-  
-    res = players.replace(/ joined the lobby/g, '').split('\n').filter(n => n !== '')
-    if (res.length !== 0) {
-      return res
-    }
-
-    return []
-  }
-
-  addLeagueData(league: any, currentSummoner: any): Observable<any> {
-    currentSummoner.league = league
-    return from(currentSummoner)
-  }
-
-  addToRankedData(match: RiotGames.Match.MatchDetail, currentSummoner, currentMatches: RiotGames.MatchList.MatchReference[]): void {
-    if (this.players.every(player => player.id !== currentSummoner.id)) {
-      this.players.push(currentSummoner)
-    }
-    let player = this.players.find(p => p.id === currentSummoner.id)
-    if (!player.matches) {
-      player.matches = []
-    }
-    let m = Match.factory(match)
-    let mappingMatch = currentMatches.find(pMatch => pMatch.gameId === match.gameId)
-    m.role = mappingMatch.role
-    m.champion = mappingMatch.champion
-    m.lane = mappingMatch.lane
-    player.matches.push(m)
-  }
-
-  formatPlayers(): void {
-    this.players = this.players.map((player: Player) => {
-      player.winrate = Math.round((100 * player.getWins()) / (player.getWins() + player.getLosses()) * 100) / 100     
-      return player
-    })
-  }
-
 }
