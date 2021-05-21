@@ -1,9 +1,13 @@
-<h1>
-  Liste des parties au format csv
-</h1>
-
-<ul>
-  <li *ngFor="let match of matchesToCSV">
-    {{match.date + ';' + match.day + ';' + match.hour + ';' + match.win + ';' + match.gameNumber}}
-  </li>
-</ul>
+<div class="container">
+  <h1>
+    Liste des parties au format csv
+  </h1>
+  <button mat-fab color="warn" aria-label="">
+    <mat-icon (click)="updateMatchesToCSV()">update</mat-icon>
+  </button>
+  <ul>
+    <li *ngFor="let match of matchesToCSV">
+      {{match.date + ';' + match.day + ';' + match.hour + ';' + match.win + ';' + match.gameNumber}}
+    </li>
+  </ul>
+</div>

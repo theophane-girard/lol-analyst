@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { forkJoin, Observable, Subject } from 'rxjs';
 import { CONFIG } from "../../../config/config";
 import { CREDENTIALS } from "../../../config/credentials";
-import { concatMap, switchMap } from "rxjs/operators";
+import { concatMap, map, switchMap } from "rxjs/operators";
 import { from } from 'rxjs';
 import { RiotGames } from "../../../types/riot-games/riot-games";
 
@@ -15,11 +15,18 @@ export class MatchesService {
   public matches$: Subject<RiotGames.Match.MatchDetail[]> = new Subject()
 
   constructor(private http: HttpClient) { 
+    
+  }
+
+  updateMatchesToCSV() {
+    let matchesRequest$: Observable<any>[] = []
+
     this.getSummoner(CREDENTIALS.summonerName).pipe(
       switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, CONFIG.matchAmount, data)),
       switchMap((response: any) => from(response.matches)),
-      concatMap((match: any) => this.getMatchById(match.gameId))
-    ).subscribe((match: RiotGames.Match.MatchDetail) => this.addMatch(match))
+      map((match: RiotGames.Match.MatchDetail) => matchesRequest$.push(this.getMatchById(match.gameId))),
+      switchMap(() => forkJoin(matchesRequest$)),
+    ).subscribe((matches: RiotGames.Match.MatchDetail[]) => this.addMatch(matches))
   }
 
   getLastMatchIdList(start: number, count: number, account: any) {
@@ -51,11 +58,9 @@ export class MatchesService {
     return this.http.get<RiotGames.League.LeagueDto[]>(url);
   }
 
-  addMatch(match: RiotGames.Match.MatchDetail) {
-    this.matches.push(match)
-    if (this.matches.length === CONFIG.matchAmount) {
-      this.notifyMatchesChanged()
-    }
+  addMatch(matches: RiotGames.Match.MatchDetail[]) {
+    this.matches = matches
+    this.notifyMatchesChanged()
   }
   
   notifyMatchesChanged() {

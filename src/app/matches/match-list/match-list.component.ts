@@ -77,4 +77,8 @@ export class MatchListComponent implements OnInit {
     }
     this.matchesToCSV.push(matchToCSV)
   }
+
+  updateMatchesToCSV() {
+    this.matchService.updateMatchesToCSV()
+  }
 }

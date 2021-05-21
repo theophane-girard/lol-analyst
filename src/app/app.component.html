@@ -1,3 +1,17 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button color="" class="" aria-label="">
+    <mat-icon (click)="drawer.toggle()">menu</mat-icon>
+  </button>
+  <span>LoL Matches Analyst</span>
+  <span class="spacer"></span>
+  <button mat-icon-button class="favorite-icon" aria-label="">
+    <mat-icon>favorite</mat-icon>
+  </button>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+    <mat-icon>share</mat-icon>
+  </button>
+</mat-toolbar>
+
 <mat-drawer-container class="container" autosize>
   <mat-drawer #drawer class="sidenav" mode="side">
     <mat-list>
@@ -6,11 +20,7 @@
       <mat-list-item routerLink="/inter-detector">Inter detector</mat-list-item>
     </mat-list>
   </mat-drawer>
-  <div class="content">
-    <button type="button" mat-button (click)="drawer.toggle()">
-      Toggle sidenav
-    </button>
-    
+  <div class="content">    
     <router-outlet></router-outlet>
   </div>
 

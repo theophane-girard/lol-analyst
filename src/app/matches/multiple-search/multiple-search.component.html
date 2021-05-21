@@ -1,8 +1,13 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="form">
   <h2>Liste des joueurs</h2>
-  <mat-form-field appearance="fill">
-    <mat-label>Liste des joueurs</mat-label>
-    <textarea formControlName="players" matInput
+  <mat-form-field class="textarea" appearance="fill">
+    <mat-label class="label">Liste des joueurs</mat-label>
+    <textarea  
+      formControlName="players" 
+      minRows="5"
+      matAutosizeMinRows="5"
+      rows="5"
+      matInput
       placeholder="Player 1 has joined the lobby Player 2 has joined the lobby..."
       class="playerListTextArea"></textarea>
   </mat-form-field>
