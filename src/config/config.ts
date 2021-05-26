@@ -30,5 +30,14 @@ export const CONFIG: any = {
     soloRankedLabel: 'RANKED_SOLO_5x5',
     championsUrl: 'http://ddragon.leagueoflegends.com/cdn/11.11.1/data/en_US/champion.json',
     championsSplashArtUrl: 'http://ddragon.leagueoflegends.com/cdn/11.11.1/img/champion/',
-    championsSplashArtExtension: '.png'
+    championsSplashArtExtension: '.png',
+    rankedPositionsExtension: '.png',
+    rankedPositionLabel: 'Position_',
+    rankedPositionTier: {
+      'Platinum': 'Plat',
+    },
+    rankedPositionLane: {
+      'Bottom': 'Bot',
+    },
+
 }

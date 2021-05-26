@@ -1,3 +1,4 @@
+import { CoreService } from "src/app/core/service/CoreService.service";
 import { CONFIG } from "src/config/config";
 import { environment } from "src/environments/environment";
 import { RiotGames } from "src/types/riot-games/riot-games";
@@ -40,7 +41,7 @@ export class Player implements RiotGames.Summoner.SummonerDto{
   }
   
   getTier() : string {
-    return this.getSoloRankedLeague().tier
+    return CoreService.capitalize(this.getSoloRankedLeague().tier)
   }
 
   static factory(player: any) : Player {
@@ -62,7 +63,19 @@ export class Player implements RiotGames.Summoner.SummonerDto{
     let average = 0
     this.matches.forEach(m => average += m.getPlayerParticipant(this.name).stats[index])
 
-    average = Math.round((average / environment.matchAmount) * 1000 ) /1000
+    average = Math.round((average / environment.matchAmount) * 10 ) /10
     return average
+  }
+  getRankedPositionPicture(match: Match) {
+    let tier = CONFIG.rankedPositionTier[this.getTier()]
+    tier = tier ? tier : this.getTier()
+    let lane = CONFIG.rankedPositionLane[CoreService.capitalize(match.lane)]
+    lane = lane ? lane : CoreService.capitalize(match.lane)
+  
+    return CONFIG.rankedPositionLabel 
+    + tier
+    + '-' 
+    + lane
+    + CONFIG.rankedPositionsExtension
   }
 }

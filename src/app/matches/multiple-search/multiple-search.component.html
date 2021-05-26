@@ -22,7 +22,9 @@
         {{ match.gameCreation | date:'dd/MM/yyyy HH:mm:ss'}} =>
         {{ match.getKDA(player.name) }} =>
         {{ match.getMatchResult(player.name) }}
-        <img [src]="CONFIG.championsSplashArtUrl + championsService.getChampion(match.champion).name + CONFIG.championsSplashArtExtension" alt="{{championsService.getChampion(match.champion).name}}"
+        <img [src]="CONFIG.championsSplashArtUrl + championsService.getChampion(match.champion).id + CONFIG.championsSplashArtExtension" alt="{{championsService.getChampion(match.champion).name}}"
+        class="rankedIcon">
+        <img [src]="'../../../assets/ranked-positions/' + player.getRankedPositionPicture(match)" alt="{{match.lane}}"
         class="rankedIcon">
       </li>
     </ul>

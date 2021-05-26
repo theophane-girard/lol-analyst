@@ -21,13 +21,11 @@ export class ChampionsService {
   }
 
   public getChampion(id: number) : RiotGames.Champion.Champion {
-    console.log(this.champions)
-    
     return this.champions.find(c => +c.key === id)
   }
 
   notifyChampionsChanged() {
-    // this.champions$.next(this.champions.slice())
+    this.champions$.next(this.champions.slice())
   }
   
   private getChampions() : Observable<RiotGames.Champion.ChampionList> {

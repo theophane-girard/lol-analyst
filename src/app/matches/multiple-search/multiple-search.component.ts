@@ -107,7 +107,7 @@ export class MultipleSearchComponent implements OnInit {
 
   formatPlayers(): void {
     this.players = this.players.map((player: Player) => {
-      player.winrate = Math.round((100 * player.getWins()) / (player.getWins() + player.getLosses()) * 100) / 100     
+      player.winrate = Math.round((100 * player.getWins()) / (player.getWins() + player.getLosses()) * 10) / 10
       return player
     })
   }
