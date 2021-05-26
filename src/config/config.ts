@@ -27,5 +27,8 @@ export const CONFIG: any = {
         6: 6,
     },
     locale: 'fr-FR',
-    soloRankedLabel: 'RANKED_SOLO_5x5'
+    soloRankedLabel: 'RANKED_SOLO_5x5',
+    championsUrl: 'http://ddragon.leagueoflegends.com/cdn/11.11.1/data/en_US/champion.json',
+    championsSplashArtUrl: 'http://ddragon.leagueoflegends.com/cdn/11.11.1/img/champion/',
+    championsSplashArtExtension: '.png'
 }

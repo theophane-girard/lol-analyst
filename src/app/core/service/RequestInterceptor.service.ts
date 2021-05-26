@@ -8,6 +8,14 @@ import { CONFIG } from '../../../config/config';
 export class RequestInterceptor implements HttpInterceptor {
 
   intercept(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (!httpRequest.params.get('isDataDragon')) {
+      return this.formatRiotRequest(httpRequest, next)
+    }
+
+    return next.handle(httpRequest)
+  }
+
+  formatRiotRequest(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const apiKey = CREDENTIALS.apiKey
     return next.handle(httpRequest.clone({ 
       setHeaders: { 'X-Riot-Token': apiKey },

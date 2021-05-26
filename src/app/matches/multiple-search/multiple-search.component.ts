@@ -9,19 +9,22 @@ import { Match } from '../models/match';
 import { Player } from '../models/player';
 import { MatchesService } from '../services/matches.service';
 import { environment } from "../../../environments/environment";
+import { ChampionsService } from '../services/champions.service';
 @Component({
   selector: 'app-multiple-search',
   templateUrl: './multiple-search.component.html',
   styleUrls: ['./multiple-search.component.scss']
 })
 export class MultipleSearchComponent implements OnInit {
+  CONFIG = CONFIG
   form: FormGroup
   players: Player[] = []
   public formattedPlayers: any
 
   constructor(
     private formBuilder: FormBuilder,
-    private matchService: MatchesService
+    private matchService: MatchesService,
+    public championsService: ChampionsService
   ) { }
 
   ngOnInit(): void {

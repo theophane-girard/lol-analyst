@@ -15,7 +15,7 @@ export class MatchesService {
   private matches: RiotGames.Match.MatchDetail[] = []
   public matches$: Subject<RiotGames.Match.MatchDetail[]> = new Subject()
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     
   }
 

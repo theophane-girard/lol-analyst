@@ -5,6 +5,7 @@ import { MatchListComponent } from './match-list/match-list.component';
 import { MaterialModule } from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultipleSearchComponent } from './multiple-search/multiple-search.component';
+import { ChampionsService } from './services/champions.service';
 
 @NgModule({
   declarations: [MatchListComponent, MultipleSearchComponent],
@@ -18,7 +19,8 @@ import { MultipleSearchComponent } from './multiple-search/multiple-search.compo
     MatchListComponent
   ],
   providers:[
-    MatchesService
+    MatchesService,
+    ChampionsService
   ]
 })
 export class MatchesModule { }

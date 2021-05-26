@@ -22,6 +22,8 @@
         {{ match.gameCreation | date:'dd/MM/yyyy HH:mm:ss'}} =>
         {{ match.getKDA(player.name) }} =>
         {{ match.getMatchResult(player.name) }}
+        <img [src]="CONFIG.championsSplashArtUrl + championsService.getChampion(match.champion).name + CONFIG.championsSplashArtExtension" alt="{{championsService.getChampion(match.champion).name}}"
+        class="rankedIcon">
       </li>
     </ul>
   </li>
