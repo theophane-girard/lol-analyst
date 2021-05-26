@@ -6,6 +6,7 @@ import { CREDENTIALS } from "../../../config/credentials";
 import { concatMap, map, switchMap } from "rxjs/operators";
 import { from } from 'rxjs';
 import { RiotGames } from "../../../types/riot-games/riot-games";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class MatchesService {
     let matchesRequest$: Observable<any>[] = []
 
     this.getSummoner(CREDENTIALS.summonerName).pipe(
-      switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, CONFIG.matchAmount, data)),
+      switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, environment.matchAmount, data)),
       switchMap((response: any) => from(response.matches)),
       map((match: RiotGames.Match.MatchDetail) => matchesRequest$.push(this.getMatchById(match.gameId))),
       switchMap(() => forkJoin(matchesRequest$)),

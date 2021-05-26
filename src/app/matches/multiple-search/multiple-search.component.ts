@@ -8,7 +8,7 @@ import { RiotGames } from 'src/types/riot-games/riot-games';
 import { Match } from '../models/match';
 import { Player } from '../models/player';
 import { MatchesService } from '../services/matches.service';
-
+import { environment } from "../../../environments/environment";
 @Component({
   selector: 'app-multiple-search',
   templateUrl: './multiple-search.component.html',
@@ -48,7 +48,7 @@ export class MultipleSearchComponent implements OnInit {
         switchMap(() => this.matchService.getSummonerLeague(currentSummoner.id)),
         tap((league: RiotGames.League.LeagueDto[]) => currentSummoner.league = league),
         switchMap(() => of(currentSummoner)),
-        switchMap(summoner => this.matchService.getLastMatchIdList(CONFIG.matchStartIndex, CONFIG.matchAmount, summoner)),
+        switchMap(summoner => this.matchService.getLastMatchIdList(CONFIG.matchStartIndex, environment.matchAmount, summoner)),
         tap((matches: RiotGames.MatchList.MatchList) => currentMatches = matches.matches),
         switchMap((matches: any) => from(matches.matches)),
         map((match: RiotGames.MatchList.MatchReference) => matchesRequest$.push(this.matchService.getMatchById(match.gameId))),

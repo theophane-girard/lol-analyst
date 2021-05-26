@@ -1,4 +1,5 @@
 import { CONFIG } from "src/config/config";
+import { environment } from "src/environments/environment";
 import { RiotGames } from "src/types/riot-games/riot-games";
 import { Match } from "./match";
 
@@ -51,5 +52,17 @@ export class Player implements RiotGames.Summoner.SummonerDto{
     }
 
     return p
+  }
+  
+  getAverageKda(): string {
+    return `${this.getAverageByIndex('kills')}/${this.getAverageByIndex('deaths')}/${this.getAverageByIndex('assists')}`
+  }
+
+  getAverageByIndex(index: string) : number {
+    let average = 0
+    this.matches.forEach(m => average += m.getPlayerParticipant(this.name).stats[index])
+
+    average = Math.round((average / environment.matchAmount) * 1000 ) /1000
+    return average
   }
 }

@@ -14,7 +14,7 @@
 </form>
 <ul>
   <li *ngFor="let player of players">
-    {{player.name + ' => ' + player.winrate + ' => ' + player.getWins() + ';' + player.getLosses() }}
+    {{player.name + ' => ' + player.winrate + ' => ' + player.getWins() + ';' + player.getLosses() + ' => ' + player.getAverageKda()}}
     <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}"
       class="rankedIcon">
     <ul>
