@@ -43,6 +43,10 @@ export class Player implements RiotGames.Summoner.SummonerDto{
   getTier() : string {
     return CoreService.capitalize(this.getSoloRankedLeague().tier)
   }
+  
+  getRank() : string {
+    return CoreService.capitalize(this.getSoloRankedLeague().tier) + ' ' + this.getSoloRankedLeague().rank
+  }
 
   static factory(player: any) : Player {
     let p = new Player()
@@ -58,6 +62,10 @@ export class Player implements RiotGames.Summoner.SummonerDto{
   getAverageKda(): string {
     return `${this.getAverageByIndex('kills')}/${this.getAverageByIndex('deaths')}/${this.getAverageByIndex('assists')}`
   }
+  
+  getAverageKdaRate(): number {
+    return (this.getAverageByIndex('kills') + this.getAverageByIndex('deaths')) / this.getAverageByIndex('assists')
+  }
 
   getAverageByIndex(index: string) : number {
     let average = 0
@@ -66,6 +74,7 @@ export class Player implements RiotGames.Summoner.SummonerDto{
     average = Math.round((average / environment.matchAmount) * 10 ) /10
     return average
   }
+
   getRankedPositionPicture(match: Match) {
     let tier = CONFIG.rankedPositionTier[this.getTier()]
     tier = tier ? tier : this.getTier()

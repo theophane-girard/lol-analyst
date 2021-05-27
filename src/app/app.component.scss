@@ -1,3 +1,6 @@
+$blackColor: black;
+$whiteColor: white;
+
 .content {
   height: 100vh;
 }
@@ -10,4 +13,40 @@ button {
   background: transparent;
   border: none;
   color: white;
+}
+
+:host ::ng-deep .flex {
+  display: flex;
+}
+
+
+:host ::ng-deep .space-between {
+  justify-content: space-between;
+}
+
+:host ::ng-deep .space-around {
+  justify-content: space-around;
+}
+
+:host ::ng-deep .center {
+  justify-content: center
+}
+
+:host ::ng-deep .bold {
+  font-weight: bold;
+}
+:host ::ng-deep .fontSize1p2vh {
+  font-size: 1.2vh;
+}
+
+:host ::ng-deep .textAlignCenter {
+  text-align: center;
+}
+
+:host ::ng-deep .textShadowWhite {
+  text-shadow: 0 0 0.5px $whiteColor;
+}
+
+:host ::ng-deep .textShadowBlack {
+  text-shadow: 0 0 0.5px $blackColor;
 }

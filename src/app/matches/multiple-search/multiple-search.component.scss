@@ -1,5 +1,11 @@
+$bigInterColor: #d31a45;
+$quiteInterColor: #db8297;
+$randomPlayerColor: #d3a81a;
+$quiteCarryColor: #1a79d3;
+$hyperCarryColor: #0fd662;
+
 .rankedIcon {
-  max-width: 30%;
+  max-width: 2vh;
 }
 
 .playerListTextArea {
@@ -23,4 +29,65 @@ body > app-root > mat-drawer-container > mat-drawer-content > div > app-multiple
 
 .label {
   color: black;
+}
+
+.win {
+  background-color: #ecf2ff;
+  color: #4171d6;
+}
+
+.loss {
+  background-color: #fff1f3;
+  color: #d31a45;
+}
+
+::ng-deep #MatchListItem > div.mat-list-item-content {
+  display: flex;
+  justify-content: space-between !important;
+}
+
+.graphBar {
+  position: relative;
+  width: 155px;
+  height: 16px;
+  padding-right: 4px;
+  background-color: #e84057;
+  color: #fff;
+  text-align: right;
+  font-size: 11px;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.winGraphBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 16px;
+  padding-left: 4px;
+  text-align: left;
+  background-color: #5383e8;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  box-sizing: border-box;
+}
+
+.bigInter {
+  color: $bigInterColor;
+}
+
+.quiteInter {
+  color: $quiteInterColor;
+}
+
+.randomPlayer {
+  color: $randomPlayerColor;
+}
+
+.quiteCarry {
+  color: $quiteCarryColor;
+}
+
+.hyperCarry {
+  color: $hyperCarryColor;
 }

@@ -40,5 +40,21 @@ export const CONFIG: any = {
       'Bottom': 'Bot',
     },
     rankedQueueId: 420,
-
+    maxInterWinRate: 47,
+    minQuiteInterWinRate: 47,
+    maxQuiteInterWinRate: 50,
+    minRandomPlayerWinRate: 50,
+    maxRandomPlayerWinRate: 52,
+    minQuiteCarryWinRate: 52,
+    maxQuiteCarryWinRate: 55,
+    minHyperCarryWinRate: 56,
+  
+    maxInterKda: 1,
+    minQuiteInterKda: 1,
+    maxQuiteInterKda: 1.2,
+    minRandomPlayerKda: 1.2,
+    maxRandomPlayerKda: 1.9,
+    minQuiteCarryKda: 1.9,
+    maxQuiteCarryKda: 3.5,
+    minHyperCarryKda: 3.5,
 }

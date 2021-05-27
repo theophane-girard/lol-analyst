@@ -2,31 +2,72 @@
   <h2>Liste des joueurs</h2>
   <mat-form-field class="textarea" appearance="fill">
     <mat-label class="label">Liste des joueurs</mat-label>
-    <textarea  
-      formControlName="players" 
-      minRows="5"
-      matAutosizeMinRows="5"
-      rows="5"
-      matInput
+    <textarea formControlName="players" minRows="5" matAutosizeMinRows="5" rows="5" matInput
       placeholder="Player 1 has joined the lobby Player 2 has joined the lobby..."
       class="playerListTextArea"></textarea>
   </mat-form-field>
 </form>
-<ul>
-  <li *ngFor="let player of players">
-    {{player.name + ' => ' + player.winrate + ' => ' + player.getWins() + ';' + player.getLosses() + ' => ' + player.getAverageKda()}}
-    <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}"
+<br>
+<div class="flex space-around">
+  <div *ngFor="let player of players">
+    <div class="bold textAlignCenter textShadowBlack">{{player.getRank()}}</div>
+    <div class="textAlignCenter">
+      <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}"
       class="rankedIcon">
-    <ul>
-      <li *ngFor="let match of player.matches">
-        {{ match.gameCreation | date:'dd/MM/yyyy HH:mm:ss'}} =>
-        {{ match.getKDA(player.name) }} =>
-        {{ match.getMatchResult(player.name) }}
-        <img [src]="CONFIG.championsSplashArtUrl + championsService.getChampion(match.champion).id + CONFIG.championsSplashArtExtension" alt="{{championsService.getChampion(match.champion).name}}"
-        class="rankedIcon">
-        <img [src]="'../../../assets/ranked-positions/' + player.getRankedPositionPicture(match)" alt="{{match.lane}}"
-        class="rankedIcon">
-      </li>
-    </ul>
-  </li>
-</ul>
+    </div>
+    <div class="bold textAlignCenter textShadowBlack">{{player.name}}</div>
+    <div class="textAlignCenter textShadowWhite" [ngClass]="{ 
+      bigInter: isInterWinRate(player.winrate), 
+      quiteInter: isQuiteInterWinRate(player.winrate),
+      randomPlayer: isRandomPlayerWinRate(player.winrate),
+      quiteCarry: isQuiteCarryWinRate(player.winrate),
+      hyperCarry: isHyperCarryWinRate(player.winrate)
+    }">
+      {{ player.winrate + '%'}}
+    </div>
+    <div class="flex center bold">
+      <div class="graphBar">
+        <div class="winGraphBar" [ngStyle]="{ 'width': player.winrate + '%'}">{{player.getWins()+ 'V'}}</div>
+        {{ player.getLosses() + 'D' }}
+      </div>
+      <div class="bold textShadowWhite" [ngClass]="{ 
+        bigInter: isInterWinRate(player.winrate), 
+        quiteInter: isQuiteInterWinRate(player.winrate),
+        randomPlayer: isRandomPlayerWinRate(player.winrate),
+        quiteCarry: isQuiteCarryWinRate(player.winrate),
+        hyperCarry: isHyperCarryWinRate(player.winrate)
+      }">
+      </div>
+    </div>
+    <div class="textAlignCenter textShadowBlack" [ngClass]="{ 
+      bigInter: isInterKDA(player), 
+      quiteInter: isQuiteInterKDA(player),
+      randomPlayer: isRandomPlayerKDA(player),
+      quiteCarry: isQuiteCarryKDA(player),
+      hyperCarry: isHyperCarryKDA(player)
+    }">
+      {{player.getAverageKda()}}
+    </div>
+  
+    <mat-list>
+      <mat-list-item *ngFor="let match of player.matches" id="MatchListItem"
+        [ngClass]="{win: match.getMatchResult(player.name), loss: !match.getMatchResult(player.name)}">
+        <div class="">
+          <img
+            [src]="CONFIG.championsSplashArtUrl + championsService.getChampion(match.champion).id + CONFIG.championsSplashArtExtension"
+            alt="{{championsService.getChampion(match.champion).name}}" class="rankedIcon">
+        </div>
+        <div class="">
+          {{ match.getKDA(player.name) }}
+        </div>
+        <div class="">
+          <img [src]="'../../../assets/ranked-positions/' + player.getRankedPositionPicture(match)" alt="{{match.lane}}"
+            class="rankedIcon">
+        </div>
+        <div class="fontSize1p2vh">
+          {{ match.gameCreation | date:'dd/MM/yyyy HH:mm'}}
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>

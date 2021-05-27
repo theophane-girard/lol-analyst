@@ -106,4 +106,43 @@ export class MultipleSearchComponent implements OnInit {
       return player
     })
   }
+
+  isInterWinRate(winrate: number) : boolean{
+    return winrate <= CONFIG.maxInterWinRate
+  }
+
+  isQuiteInterWinRate(winrate: number) : boolean{
+    return winrate > CONFIG.minQuiteInterWinRate && winrate < CONFIG.maxQuiteInterWinRate
+  }
+
+  isRandomPlayerWinRate(winrate: number) : boolean{
+    return winrate >= CONFIG.minRandomPlayerWinRate && winrate <= CONFIG.maxRandomPlayerWinRate
+  }
+
+  isQuiteCarryWinRate(winrate: number) : boolean{
+    return winrate > CONFIG.minQuiteCarryWinRate && winrate <= CONFIG.maxQuiteCarryWinRate
+  }
+
+  isHyperCarryWinRate(winrate: number) : boolean{
+    return winrate > CONFIG.minHyperCarryWinRate
+  }
+
+  isInterKDA(player: Player) : boolean { 
+    return player.getAverageKdaRate() <= CONFIG.maxInterKda
+  }
+
+  isQuiteInterKDA(player: Player) : boolean {
+    return player.getAverageKdaRate() > CONFIG.minQuiteInterKda && player.getAverageKdaRate() <= CONFIG.maxQuiteInterKda
+  }
+  isRandomPlayerKDA(player: Player) : boolean {
+    return player.getAverageKdaRate() > CONFIG.minRandomPlayerKda && CONFIG.maxRandomPlayerKda
+  }
+  isQuiteCarryKDA(player: Player) : boolean {
+
+    return player.getAverageKdaRate() > CONFIG.minQuiteCarryKda && player.getAverageKdaRate() <= CONFIG.maxQuiteCarryKda
+  }
+  isHyperCarryKDA(player: Player) : boolean {
+    return player.getAverageKdaRate() > CONFIG.minHyperCarryKda
+  }
+
 }
