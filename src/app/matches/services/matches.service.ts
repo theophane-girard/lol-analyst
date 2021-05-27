@@ -34,6 +34,7 @@ export class MatchesService {
     let param = new HttpParams()
     param = param.append('endIndex', `${count}`)
     param = param.append('beginIndex', `${start}`)
+    param = param.append('queue', `${CONFIG.rankedQueueId}`)
 
     let url = CONFIG.apiUrlMatchesByAccountId 
       + account.accountId

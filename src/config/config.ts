@@ -39,5 +39,6 @@ export const CONFIG: any = {
     rankedPositionLane: {
       'Bottom': 'Bot',
     },
+    rankedQueueId: 420,
 
 }

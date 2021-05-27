@@ -68,12 +68,7 @@ export class MultipleSearchComponent implements OnInit {
   }
   getPlayerNames(players: string) : string[] {
         
-    let res = players.replace(/ joined the lobby/g, '').split(',').filter(n => n !== '')
-    if (res.length !== 0) {
-      return res
-    }
-  
-    res = players.replace(/ joined the lobby/g, '').split('\n').filter(n => n !== '')
+    let res = players.replace(/( joined the lobby|\n)/g, ',').split(',').filter(n => n !== '')
     if (res.length !== 0) {
       return res
     }
