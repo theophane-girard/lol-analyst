@@ -57,4 +57,10 @@ export const CONFIG: any = {
     minQuiteCarryKda: 1.9,
     maxQuiteCarryKda: 3.5,
     minHyperCarryKda: 3.5,
+    label: {
+      inter: 'INTER',
+      troller: 'Troll',
+      newAccount: 'New account',
+      hyperCarry: 'Hyper Carry',
+    }
 }

@@ -2,6 +2,7 @@ import { CoreService } from "src/app/core/service/CoreService.service";
 import { CONFIG } from "src/config/config";
 import { environment } from "src/environments/environment";
 import { RiotGames } from "src/types/riot-games/riot-games";
+import { Label } from "./label";
 import { Match } from "./match";
 
 export class Player implements RiotGames.Summoner.SummonerDto{
@@ -15,6 +16,7 @@ export class Player implements RiotGames.Summoner.SummonerDto{
   winrate: number
   matches: Match[]
   league: RiotGames.League.LeagueDto[]
+  labels: Label[]
 
   getSoloRankedLeague() : RiotGames.League.LeagueDto {
     return this.league.find(l => l.queueType === CONFIG.soloRankedLabel)

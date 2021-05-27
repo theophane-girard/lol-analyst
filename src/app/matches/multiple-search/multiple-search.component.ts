@@ -10,6 +10,8 @@ import { Player } from '../models/player';
 import { MatchesService } from '../services/matches.service';
 import { environment } from "../../../environments/environment";
 import { ChampionsService } from '../services/champions.service';
+import { LabelClasses } from '../models/label-classes';
+import { Label } from '../models/label';
 @Component({
   selector: 'app-multiple-search',
   templateUrl: './multiple-search.component.html',
@@ -20,6 +22,7 @@ export class MultipleSearchComponent implements OnInit {
   form: FormGroup
   players: Player[] = []
   public formattedPlayers: any
+  loading: boolean = false
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,6 +38,7 @@ export class MultipleSearchComponent implements OnInit {
   }
 
   loadPlayerRankedData(players: string): void {
+    this.loading = true
     let playerNames: string[] = this.getPlayerNames(players)
     if (playerNames.length === 0) {
       console.error('pas de joueur')
@@ -103,8 +107,28 @@ export class MultipleSearchComponent implements OnInit {
   formatPlayers(): void {
     this.players = this.players.map((player: Player) => {
       player.winrate = Math.round((100 * player.getWins()) / (player.getWins() + player.getLosses()) * 10) / 10
+      player.labels = this.setPlayerLabels(player)
       return player
     })
+    this.loading = false
+  }
+
+  setPlayerLabels(player: Player): Label[] {
+    let labelList: Label[] = []
+
+    if (player.summonerLevel < 100) {
+      labelList.push(Label.factory('newAccount'))
+    }
+
+    if (player.getAverageKdaRate() < 1) {
+      labelList.push(Label.factory('inter'))
+    }
+
+    if (player.getAverageKdaRate() > 3.5) {
+      labelList.push(Label.factory('hyperCarry'))
+    }
+
+    return labelList
   }
 
   isInterWinRate(winrate: number) : boolean{

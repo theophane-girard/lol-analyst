@@ -6,9 +6,10 @@ import { MaterialModule } from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultipleSearchComponent } from './multiple-search/multiple-search.component';
 import { ChampionsService } from './services/champions.service';
+import { LabelComponent } from './label/label.component';
 
 @NgModule({
-  declarations: [MatchListComponent, MultipleSearchComponent],
+  declarations: [MatchListComponent, MultipleSearchComponent, LabelComponent],
   imports: [
     CommonModule,
     MaterialModule,    

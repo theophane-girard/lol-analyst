@@ -1,9 +1,3 @@
-$bigInterColor: #d31a45;
-$quiteInterColor: #db8297;
-$randomPlayerColor: #d3a81a;
-$quiteCarryColor: #1a79d3;
-$hyperCarryColor: #0fd662;
-
 .rankedIcon {
   max-width: 2vh;
 }
@@ -73,21 +67,21 @@ body > app-root > mat-drawer-container > mat-drawer-content > div > app-multiple
 }
 
 .bigInter {
-  color: $bigInterColor;
+  color: var(--bigInterColor);
 }
 
 .quiteInter {
-  color: $quiteInterColor;
+  color: var(--quiteInterColor);
 }
 
 .randomPlayer {
-  color: $randomPlayerColor;
+  color: var(--randomPlayerColor);
 }
 
 .quiteCarry {
-  color: $quiteCarryColor;
+  color: var(--quiteCarryColor);
 }
 
 .hyperCarry {
-  color: $hyperCarryColor;
+  color: var(--hyperCarryColor);
 }

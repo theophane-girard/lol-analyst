@@ -1,6 +1,3 @@
-$blackColor: black;
-$whiteColor: white;
-
 .content {
   height: 100vh;
 }
@@ -44,9 +41,9 @@ button {
 }
 
 :host ::ng-deep .textShadowWhite {
-  text-shadow: 0 0 0.5px $whiteColor;
+  text-shadow: 0 0 0.5px var(--whiteColor);
 }
 
 :host ::ng-deep .textShadowBlack {
-  text-shadow: 0 0 0.5px $blackColor;
+  text-shadow: 0 0 0.5px var(--blackColor);
 }

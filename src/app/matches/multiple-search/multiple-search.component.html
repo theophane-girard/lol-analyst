@@ -8,7 +8,7 @@
   </mat-form-field>
 </form>
 <br>
-<div class="flex space-around">
+<div class="flex space-around" *ngIf="!loading">
   <div *ngFor="let player of players">
     <div class="bold textAlignCenter textShadowBlack">{{player.getRank()}}</div>
     <div class="textAlignCenter">
@@ -27,7 +27,7 @@
     </div>
     <div class="flex center bold">
       <div class="graphBar">
-        <div class="winGraphBar" [ngStyle]="{ 'width': player.winrate + '%'}">{{player.getWins()+ 'V'}}</div>
+        <div class="winGraphBar" [ngStyle]="{ 'width': player.winrate + '%'}">{{player.getWins() + 'V'}}</div>
         {{ player.getLosses() + 'D' }}
       </div>
       <div class="bold textShadowWhite" [ngClass]="{ 
@@ -48,7 +48,9 @@
     }">
       {{player.getAverageKda()}}
     </div>
-  
+    <div>
+      <app-label *ngFor="let label of player.labels" [label]="label.name" [labelClasses]="label.labelClasses"></app-label>
+    </div>
     <mat-list>
       <mat-list-item *ngFor="let match of player.matches" id="MatchListItem"
         [ngClass]="{win: match.getMatchResult(player.name), loss: !match.getMatchResult(player.name)}">
@@ -65,9 +67,12 @@
             class="rankedIcon">
         </div>
         <div class="fontSize1p2vh">
-          {{ match.gameCreation | date:'dd/MM/yyyy HH:mm'}}
+          {{ match.gameCreation | date:'dd/MM HH:mm'}}
         </div>
       </mat-list-item>
     </mat-list>
   </div>
+</div>
+<div class="flex space-around" *ngIf="loading">
+  <mat-spinner></mat-spinner>
 </div>
