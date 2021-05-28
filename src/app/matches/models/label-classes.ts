@@ -1,6 +1,6 @@
 export class LabelClasses {
     inter: boolean
-    troller: boolean
+    troll: boolean
     newAccount: boolean
     hyperCarry: boolean
 }

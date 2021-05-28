@@ -12,7 +12,7 @@ export class Label {
         hyperCarry: str === 'hyperCarry' ? true : false,
         inter: str === 'inter' ? true : false,
         newAccount: str === 'newAccount' ? true : false,
-        troller: str === 'troller' ? true : false,
+        troll: str === 'troll' ? true : false,
         carry: str === 'carry' ? true : false,
       }
     }
