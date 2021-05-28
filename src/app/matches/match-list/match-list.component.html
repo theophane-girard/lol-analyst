@@ -2,9 +2,17 @@
   <h1>
     Liste des parties au format csv
   </h1>
-  <button mat-fab color="warn" aria-label="">
-    <mat-icon (click)="updateMatchesToCSV()">update</mat-icon>
-  </button>
+  <div class="flex space-around">
+    <form [formGroup]="form" class="form">
+      <mat-form-field appearance="fill">
+        <mat-label>Match amount</mat-label>
+        <input matInput type="number" formControlName="matchAmount" min="1">
+      </mat-form-field>
+    </form>
+    <button mat-fab color="warn" aria-label="">
+      <mat-icon (click)="updateMatchesToCSV()">update</mat-icon>
+    </button>
+  </div>
   <ul>
     <li *ngFor="let match of matchesToCSV">
       {{match.date + ';' + match.day + ';' + match.hour + ';' + match.win + ';' + match.gameNumber}}

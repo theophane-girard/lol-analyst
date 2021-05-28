@@ -6,7 +6,8 @@ import { formatDate, registerLocaleData} from "@angular/common";
 import { CREDENTIALS } from '../../../config/credentials';
 import localeFr from '@angular/common/locales/fr';
 import { RiotGames } from '../../../types/riot-games/riot-games';
-import { FormBuilder } from '@angular/forms';''
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';import { environment } from 'src/environments/environment';
+''
 registerLocaleData(localeFr);
 
 @Component({
@@ -18,6 +19,7 @@ export class MatchListComponent implements OnInit {
   CREDENTIALS = CREDENTIALS
   matches: RiotGames.Match.MatchDetail[] = []
   matchesToCSV: MatchToCSV[] = []
+  form: FormGroup
 
   constructor(
     private matchService: MatchesService,
@@ -25,6 +27,10 @@ export class MatchListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.form = new FormGroup({
+      matchAmount: new FormControl(environment.matchAmount)
+    })
     this.matchService.matches$.subscribe(matches => this.generateCSVData(matches))
   }
 
@@ -79,6 +85,6 @@ export class MatchListComponent implements OnInit {
   }
 
   updateMatchesToCSV() {
-    this.matchService.updateMatchesToCSV()
+    this.matchService.updateMatchesToCSV(this.form.controls.matchAmount.value)
   }
 }

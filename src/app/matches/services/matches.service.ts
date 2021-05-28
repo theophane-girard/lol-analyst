@@ -19,11 +19,11 @@ export class MatchesService {
     
   }
 
-  updateMatchesToCSV() {
+  updateMatchesToCSV(matchAmount: number) {
     let matchesRequest$: Observable<any>[] = []
 
     this.getSummoner(CREDENTIALS.summonerName).pipe(
-      switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, environment.matchAmount, data)),
+      switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, matchAmount, data)),
       switchMap((response: any) => from(response.matches)),
       map((match: RiotGames.Match.MatchDetail) => matchesRequest$.push(this.getMatchById(match.gameId))),
       switchMap(() => forkJoin(matchesRequest$)),
