@@ -31,22 +31,37 @@ export class Player implements RiotGames.Summoner.SummonerDto{
   }
 
   getWins() : number {
+    if (this.league.length === 0) {
+      return -1
+    }
     return this.getSoloRankedLeague().wins
   }
 
   getLosses() : number {
+    if (this.league.length === 0) {
+      return -1
+    }
     return this.getSoloRankedLeague().losses
   }
 
   isOnHotStreak() : boolean {
+    if (this.league.length === 0) {
+      return false
+    }
     return this.getSoloRankedLeague().hotStreak
   }
   
   getTier() : string {
+    if (this.league.length === 0) {
+      return CONFIG.unrankedLabel
+    }
     return CoreService.capitalize(this.getSoloRankedLeague().tier)
   }
   
   getRank() : string {
+    if (this.league.length === 0) {
+      return CONFIG.unrankedLabel
+    }
     return CoreService.capitalize(this.getSoloRankedLeague().tier) + ' ' + this.getSoloRankedLeague().rank
   }
 
@@ -66,7 +81,7 @@ export class Player implements RiotGames.Summoner.SummonerDto{
   }
   
   getAverageKdaRate(): number {
-    return (this.getAverageByIndex('kills') + this.getAverageByIndex('deaths')) / this.getAverageByIndex('assists')
+    return (this.getAverageByIndex('kills') + this.getAverageByIndex('assists')) / this.getAverageByIndex('deaths')
   }
 
   getAverageByIndex(index: string) : number {

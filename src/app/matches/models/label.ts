@@ -13,6 +13,7 @@ export class Label {
         inter: str === 'inter' ? true : false,
         newAccount: str === 'newAccount' ? true : false,
         troller: str === 'troller' ? true : false,
+        carry: str === 'carry' ? true : false,
       }
     }
   }

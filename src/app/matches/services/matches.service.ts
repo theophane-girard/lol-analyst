@@ -42,6 +42,17 @@ export class MatchesService {
     return this.http.get<RiotGames.MatchList.MatchList>(url, { params: param })
   }
 
+  getMatchListByChampId(id: number, account: any) {
+    let param = new HttpParams()
+    param = param.append('queue', `${CONFIG.rankedQueueId}`)
+    param = param.append('champion', id)
+
+    let url = CONFIG.apiUrlMatchesByAccountId 
+      + account.accountId
+
+    return this.http.get<RiotGames.MatchList.MatchList>(url, { params: param })
+  }
+
   getMatchById(id: number) {
     let url = CONFIG.apiUrlMatchesById + id
 

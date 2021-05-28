@@ -116,16 +116,24 @@ export class MultipleSearchComponent implements OnInit {
   setPlayerLabels(player: Player): Label[] {
     let labelList: Label[] = []
 
-    if (player.summonerLevel < 100) {
+    if (player.summonerLevel < CONFIG.newAccountValue) {
       labelList.push(Label.factory('newAccount'))
     }
 
-    if (player.getAverageKdaRate() < 1) {
+    if (player.getAverageKdaRate() < CONFIG.maxInterKda) {
       labelList.push(Label.factory('inter'))
     }
 
-    if (player.getAverageKdaRate() > 3.5) {
+    if (player.getAverageKdaRate() > CONFIG.minQuiteCarryKda && player.getAverageKdaRate() <= CONFIG.maxQuiteCarryKda) {
+      labelList.push(Label.factory('carry'))
+    }
+
+    if (player.getAverageKdaRate() > CONFIG.minHyperCarryKda) {
       labelList.push(Label.factory('hyperCarry'))
+    }
+
+    if (player.winrate <= CONFIG.maxInterWinRate) {
+      labelList.push(Label.factory('troll'))
     }
 
     return labelList

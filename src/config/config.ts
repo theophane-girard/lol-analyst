@@ -53,14 +53,17 @@ export const CONFIG: any = {
     minQuiteInterKda: 1,
     maxQuiteInterKda: 1.2,
     minRandomPlayerKda: 1.2,
-    maxRandomPlayerKda: 1.9,
-    minQuiteCarryKda: 1.9,
+    maxRandomPlayerKda: 3.0,
+    minQuiteCarryKda: 3.0,
     maxQuiteCarryKda: 3.5,
     minHyperCarryKda: 3.5,
     label: {
       inter: 'INTER',
-      troller: 'Troll',
+      troller: 'TROLL',
       newAccount: 'New account',
-      hyperCarry: 'Hyper Carry',
-    }
+      hyperCarry: 'HYPER CARRY',
+      carry: 'Carry',
+    },
+    newAccountValue: 100,
+    unrankedLabel: 'unranked'
 }
