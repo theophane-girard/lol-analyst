@@ -47,3 +47,7 @@ button {
 :host ::ng-deep .textShadowBlack {
   text-shadow: 0 0 0.5px var(--blackColor);
 }
+
+:host ::ng-deep .height12vh {
+  height: 12vh;
+}

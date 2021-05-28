@@ -45,8 +45,8 @@ export class MultipleSearchComponent implements OnInit {
       return
     }
     let playerResquests: Observable<any>[] = []
-
-    playerNames.filter(name => name.replace(/\s/g, '') !== CREDENTIALS.summonerName.replace(/\s/g, '')).forEach(name => {
+    // playerNames = playerNames.filter(name => name.replace(/\s/g, '') !== CREDENTIALS.summonerName.replace(/\s/g, ''))
+    playerNames.forEach(name => {
       let currentSummoner: Player
       let currentMatches: any
       let matchesRequest$: Observable<any>[] = []
