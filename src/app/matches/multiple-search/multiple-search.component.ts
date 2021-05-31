@@ -3,14 +3,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Observable, of, from, forkJoin } from 'rxjs';
 import { tap, switchMap, map } from 'rxjs/operators';
 import { CONFIG } from 'src/config/config';
-import { CREDENTIALS } from 'src/config/credentials';
 import { RiotGames } from 'src/types/riot-games/riot-games';
 import { Match } from '../models/match';
 import { Player } from '../models/player';
 import { MatchesService } from '../services/matches.service';
 import { environment } from "../../../environments/environment";
 import { ChampionsService } from '../services/champions.service';
-import { LabelClasses } from '../models/label-classes';
 import { Label } from '../models/label';
 @Component({
   selector: 'app-multiple-search',
@@ -37,6 +35,12 @@ export class MultipleSearchComponent implements OnInit {
     this.form.controls.players.valueChanges.subscribe(players => this.loadPlayerRankedData(players))
   }
 
+  /**
+   * Nutripax joined the lobby
+   * Holcahust joined the lobby
+   * @param players 
+   * @returns 
+   */
   loadPlayerRankedData(players: string): void {
     this.loading = true
     let playerNames: string[] = this.getPlayerNames(players)
@@ -45,7 +49,8 @@ export class MultipleSearchComponent implements OnInit {
       return
     }
     let playerResquests: Observable<any>[] = []
-    // playerNames = playerNames.filter(name => name.replace(/\s/g, '') !== CREDENTIALS.summonerName.replace(/\s/g, ''))
+    
+    playerNames = playerNames.filter(name => name.replace(/\s/g, '') !== environment.CREDENTIALS.summonerName.replace(/\s/g, ''))
     playerNames.forEach(name => {
       let currentSummoner: Player
       let currentMatches: any
@@ -66,10 +71,8 @@ export class MultipleSearchComponent implements OnInit {
     });
 
     forkJoin(playerResquests).subscribe(() => this.formatPlayers())
-  
-    // Nutripax joined the lobby
-    // Holcahust joined the lobby
   }
+
   getPlayerNames(players: string) : string[] {
         
     let res = players.replace(/( joined the lobby|\n)/g, ',').split(',').filter(n => n !== '')

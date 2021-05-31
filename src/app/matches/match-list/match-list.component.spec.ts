@@ -1,4 +1,6 @@
+import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 
 import { MatchListComponent } from './match-list.component';
 
@@ -8,7 +10,13 @@ describe('MatchListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MatchListComponent ]
+      declarations: [ MatchListComponent ],
+      imports: [HttpClientModule],
+      providers: [
+        {
+          provide: FormBuilder
+        }
+      ]
     })
     .compileComponents();
   }));

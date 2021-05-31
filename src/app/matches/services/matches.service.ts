@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { CONFIG } from "../../../config/config";
-import { CREDENTIALS } from "../../../config/credentials";
 import { concatMap, map, switchMap } from "rxjs/operators";
 import { from } from 'rxjs';
 import { RiotGames } from "../../../types/riot-games/riot-games";
@@ -22,7 +21,7 @@ export class MatchesService {
   updateMatchesToCSV(matchAmount: number) {
     let matchesRequest$: Observable<any>[] = []
 
-    this.getSummoner(CREDENTIALS.summonerName).pipe(
+    this.getSummoner(environment.CREDENTIALS.summonerName).pipe(
       switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, matchAmount, data)),
       switchMap((response: any) => from(response.matches)),
       map((match: RiotGames.Match.MatchDetail) => matchesRequest$.push(this.getMatchById(match.gameId))),

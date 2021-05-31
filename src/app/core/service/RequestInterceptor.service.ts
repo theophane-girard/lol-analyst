@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpEvent, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CREDENTIALS } from '../../../config/credentials';
 import { CONFIG } from '../../../config/config';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
@@ -16,8 +16,8 @@ export class RequestInterceptor implements HttpInterceptor {
   }
 
   formatRiotRequest(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const apiKey = CREDENTIALS.apiKey
-    return next.handle(httpRequest.clone({ 
+    const apiKey = environment.firebase.apiKey    
+    return next.handle(httpRequest.clone({
       setHeaders: { 'X-Riot-Token': apiKey },
       url: CONFIG.apiUrl + httpRequest.url
     }));

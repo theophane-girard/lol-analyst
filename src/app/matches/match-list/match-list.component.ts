@@ -3,11 +3,10 @@ import { MatchesService } from '../services/matches.service';
 import { MatchToCSV } from '../models/match-to-csv';
 import { CONFIG } from '../../../config/config';
 import { formatDate, registerLocaleData} from "@angular/common";
-import { CREDENTIALS } from '../../../config/credentials';
 import localeFr from '@angular/common/locales/fr';
 import { RiotGames } from '../../../types/riot-games/riot-games';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';import { environment } from 'src/environments/environment';
-''
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 registerLocaleData(localeFr);
 
 @Component({
@@ -16,7 +15,7 @@ registerLocaleData(localeFr);
   styleUrls: ['./match-list.component.scss']
 })
 export class MatchListComponent implements OnInit {
-  CREDENTIALS = CREDENTIALS
+  CREDENTIALS = environment.CREDENTIALS
   matches: RiotGames.Match.MatchDetail[] = []
   matchesToCSV: MatchToCSV[] = []
   form: FormGroup
@@ -68,7 +67,7 @@ export class MatchListComponent implements OnInit {
   }
 
   pushToMatchesCSV(match: RiotGames.Match.MatchDetail, matches: RiotGames.Match.MatchDetail[]) {
-    let summonerToMap = match.participantIdentities.find(p => p.player.summonerName === CREDENTIALS.summonerName)
+    let summonerToMap = match.participantIdentities.find(p => p.player.summonerName === this.CREDENTIALS.summonerName)
     let date = new Date(match.gameCreation)
     let summonerParticipantId: number = summonerToMap.participantId
     let participant = match.participants.find(p => p.participantId === summonerParticipantId)
