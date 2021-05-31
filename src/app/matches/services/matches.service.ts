@@ -5,7 +5,7 @@ import { CONFIG } from "../../../config/config";
 import { concatMap, map, switchMap } from "rxjs/operators";
 import { from } from 'rxjs';
 import { RiotGames } from "../../../types/riot-games/riot-games";
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

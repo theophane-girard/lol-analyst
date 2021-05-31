@@ -6,7 +6,7 @@ import { formatDate, registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
 import { RiotGames } from '../../../types/riot-games/riot-games';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 registerLocaleData(localeFr);
 
 @Component({
