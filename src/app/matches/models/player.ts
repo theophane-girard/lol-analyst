@@ -1,7 +1,7 @@
-import { CoreService } from "src/app/core/service/CoreService.service";
-import { CONFIG } from "src/config/config";
-import { environment } from "src/environments/environment";
-import { RiotGames } from "src/types/riot-games/riot-games";
+import { CoreService } from "../../../app/core/service/CoreService.service";
+import { CONFIG } from "../../../config/config";
+import { environment } from "../../../environments/environment";
+import { RiotGames } from "../../../types/riot-games/riot-games";
 import { Label } from "./label";
 import { Match } from "./match";
 

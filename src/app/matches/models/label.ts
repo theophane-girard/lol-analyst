@@ -1,4 +1,4 @@
-import { CONFIG } from "src/config/config"
+import { CONFIG } from "../../../config/config"
 import { LabelClasses } from "./label-classes"
 
 export class Label {

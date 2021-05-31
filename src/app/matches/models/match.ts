@@ -1,5 +1,5 @@
-import { CONFIG } from "src/config/config";
-import { RiotGames } from "src/types/riot-games/riot-games";
+import { CONFIG } from "../../../config/config";
+import { RiotGames } from "../../../types/riot-games/riot-games";
 
 export class Match implements RiotGames.Match.MatchDetail {
   mapId: number;
