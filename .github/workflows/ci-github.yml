@@ -18,6 +18,7 @@ jobs:
       - run : npm run build
         env:
           RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+          SUMMONER_NAME: ${{ secrets.SUMMONER_NAME }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
