@@ -36,7 +36,6 @@ export class MultipleSearchComponent implements OnInit {
   }
 
   /**
-   * test player
    * Nutripax joined the lobby
    * Holcahust joined the lobby
    * @param players 
