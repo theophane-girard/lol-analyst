@@ -16,7 +16,7 @@ export class RequestInterceptor implements HttpInterceptor {
   }
 
   formatRiotRequest(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const apiKey = environment.firebase.apiKey    
+    const apiKey = environment.CREDENTIALS.apiKey
     return next.handle(httpRequest.clone({
       setHeaders: { 'X-Riot-Token': apiKey },
       url: CONFIG.apiUrl + httpRequest.url

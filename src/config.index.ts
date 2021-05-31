@@ -1,18 +1,15 @@
 import {writeFile} from 'fs';
 
-const targetPath = './src/environments/environment.prod.ts';
-const envConfigFile = `export const environment = {
-    production: true,
-    firebase: {
-      apiKey: '${process.env.RIOT_API_KEY}'
-    },
+const targetPath = './src/config/credentials.ts';
+const prodCredentialsFile = `export const CREDENTIALS = {
     CREDENTIALS: {
-      summonerName: '${process.env.SUMMONER_NAME}'
+      summonerName: '${process.env.SUMMONER_NAME}',
+      apiKey: '${process.env.RIOT_API_KEY}'
     }
 };
 `;
 
-writeFile(targetPath, envConfigFile, 'utf8', (err) => {
+writeFile(targetPath, prodCredentialsFile, 'utf8', (err) => {
   if (err) {
     return console.log(err);
   }
