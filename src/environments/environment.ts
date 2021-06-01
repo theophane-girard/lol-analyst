@@ -6,7 +6,8 @@ import { CREDENTIALS } from "../config/credentials";
 export const environment = {
   production: false,
   matchAmount: 3,
-  ...CREDENTIALS
+  ...CREDENTIALS,
+  riotBaseUrl: 'http://localhost:4200'
 };
 
 /*

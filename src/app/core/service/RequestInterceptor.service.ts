@@ -19,7 +19,7 @@ export class RequestInterceptor implements HttpInterceptor {
     const apiKey = environment.CREDENTIALS.apiKey
     return next.handle(httpRequest.clone({
       setHeaders: { 'X-Riot-Token': apiKey },
-      url: CONFIG.apiUrl + httpRequest.url
+      url: environment.riotBaseUrl + CONFIG.apiUrl + httpRequest.url
     }));
   }
 }

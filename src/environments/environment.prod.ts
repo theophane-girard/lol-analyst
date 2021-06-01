@@ -4,5 +4,6 @@ export const environment = {
   CREDENTIALS: {
     apiKey: null,
     summonerName: null
-  }
+  },
+  riotBaseUrl: 'https://euw1.api.riotgames.com'
 };
