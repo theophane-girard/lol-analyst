@@ -18,7 +18,10 @@ export class RequestInterceptor implements HttpInterceptor {
   formatRiotRequest(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const apiKey = environment.CREDENTIALS.apiKey
     return next.handle(httpRequest.clone({
-      setHeaders: { 'X-Riot-Token': apiKey },
+      setHeaders: { 
+        'X-Riot-Token': apiKey,
+        'Access-Control-Allow-Origin': '*'
+      },
       url: environment.riotBaseUrl + CONFIG.apiUrl + httpRequest.url
     }));
   }
