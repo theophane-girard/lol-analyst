@@ -4,5 +4,5 @@ export const environment = {
   production: true,
   matchAmount: 20,
   ...CREDENTIALS,
-  riotBaseUrl: 'https://euw1.api.riotgames.com'
+  riotBaseUrl: 'https://inter-detector-api.web.app'
 };
