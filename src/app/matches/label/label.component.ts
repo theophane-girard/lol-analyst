@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { LabelClasses } from '../models/label-classes';
 
 @Component({
   selector: 'app-label',
@@ -8,7 +7,7 @@ import { LabelClasses } from '../models/label-classes';
 })
 export class LabelComponent implements OnInit {
   @Input() label
-  @Input() labelClasses: LabelClasses
+  @Input() labelClasses: string
 
   constructor() { }
 

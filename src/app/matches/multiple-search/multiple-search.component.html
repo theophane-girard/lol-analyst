@@ -10,10 +10,10 @@
 <br>
 <div class="flex space-around" *ngIf="!loading">
   <div *ngFor="let player of players">
-    <!-- <div class="bold textAlignCenter textShadowBlack">{{player.getRank()}}</div> -->
+    <div class="bold textAlignCenter textShadowBlack">{{player.rank}}</div>
     <div class="textAlignCenter">
-      <!-- <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}"
-      class="rankedIcon"> -->
+      <img src="../../../assets/ranked-emblems/Emblem_{{player.tier}}.png" alt="{{player.tier}}"
+      class="rankedIcon">
     </div>
     <div class="bold textAlignCenter textShadowBlack">{{player.name}}</div>
     <div class="textAlignCenter textShadowWhite" [ngClass]="{ 
@@ -27,8 +27,8 @@
     </div>
     <div class="flex center bold">
       <div class="graphBar">
-        <!-- <div class="winGraphBar" [ngStyle]="{ 'width': player.winrate + '%'}">{{player.getWins() + 'V'}}</div>
-        {{ player.getLosses() + 'D' }} -->
+        <div class="winGraphBar" [ngStyle]="{ 'width': player.winrate + '%'}">{{player.wins + 'V'}}</div>
+        {{ player.losses + 'D' }}
       </div>
       <div class="bold textShadowWhite" [ngClass]="{ 
         bigInter: isInterWinRate(player.winrate), 
@@ -46,25 +46,25 @@
       quiteCarry: isQuiteCarryKDA(player),
       hyperCarry: isHyperCarryKDA(player)
     }">
-      <!-- {{player.getAverageKda()}} -->
+      {{player.kda}}
     </div>
     <div class="height12vh">
-      <app-label *ngFor="let label of player.labels" [label]="label.name" [labelClasses]="label.labelClasses"></app-label>
+      <app-label *ngFor="let label of player.labels" [label]="label.name" [labelClasses]="label.className"></app-label>
     </div>
     <mat-list>
       <mat-list-item *ngFor="let match of player.matches" id="MatchListItem"
-        [ngClass]="{win: match.getMatchResult(player.name), loss: !match.getMatchResult(player.name)}">
+        [ngClass]="{win: match.win, loss: !match.win}">
         <div class="">
           <img
             [src]="CONFIG.championsSplashArtUrl + championsService.getChampion(match.champion).id + CONFIG.championsSplashArtExtension"
             alt="{{championsService.getChampion(match.champion).name}}" class="rankedIcon">
         </div>
         <div class="">
-          {{ match.getKDA(player.name) }}
+          {{ match.kda }}
         </div>
         <div class="">
-          <!-- <img [src]="'../../../assets/ranked-positions/' + player.getRankedPositionPicture(match)" alt="{{match.lane}}"
-            class="rankedIcon"> -->
+          <img [src]="'../../../assets/ranked-positions/' + getRankedPositionPicture(player, match)" alt="{{match.lane}}"
+            class="rankedIcon">
         </div>
         <div class="fontSize1p2vh">
           {{ match.gameCreation | date:'dd/MM HH:mm'}}

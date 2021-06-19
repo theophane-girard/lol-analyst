@@ -17,6 +17,9 @@ export class Player implements RiotGames.Summoner.SummonerDto{
   matches: Match[]
   league: RiotGames.League.LeagueDto[]
   labels: Label[]
+  kdaRate: number
+  kda: string
+  tier: string
 
   getSoloRankedLeague() : RiotGames.League.LeagueDto {
     return this.league.find(l => l.queueType === CONFIG.soloRankedLabel)
@@ -90,18 +93,5 @@ export class Player implements RiotGames.Summoner.SummonerDto{
 
     average = Math.round((average / environment.matchAmount) * 10 ) /10
     return average
-  }
-
-  getRankedPositionPicture(match: Match) {
-    let tier = CONFIG.rankedPositionTier[this.getTier()]
-    tier = tier ? tier : this.getTier()
-    let lane = CONFIG.rankedPositionLane[CoreService.capitalize(match.lane)]
-    lane = lane ? lane : CoreService.capitalize(match.lane)
-  
-    return CONFIG.rankedPositionLabel 
-    + tier
-    + '-' 
-    + lane
-    + CONFIG.rankedPositionsExtension
   }
 }

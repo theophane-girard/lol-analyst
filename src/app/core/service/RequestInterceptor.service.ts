@@ -16,8 +16,6 @@ export class RequestInterceptor implements HttpInterceptor {
   }
 
   formatRiotRequest(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const apiKey = environment.CREDENTIALS.apiKey
-    let a = environment.riotBaseUrl + httpRequest.url
     return next.handle(httpRequest.clone({
       url: environment.riotBaseUrl + httpRequest.url
     }));

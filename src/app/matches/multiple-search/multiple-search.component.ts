@@ -10,6 +10,7 @@ import { MatchesService } from '../services/matches.service';
 import { environment } from "../../../environments/environment";
 import { ChampionsService } from '../services/champions.service';
 import { Label } from '../models/label';
+import { CoreService } from 'src/app/core/service/CoreService.service';
 @Component({
   selector: 'app-multiple-search',
   templateUrl: './multiple-search.component.html',
@@ -86,21 +87,35 @@ export class MultipleSearchComponent implements OnInit {
   }
 
   isInterKDA(player: Player) : boolean { 
-    return player.getAverageKdaRate() <= CONFIG.maxInterKda
+    return player.kdaRate <= CONFIG.maxInterKda
   }
 
   isQuiteInterKDA(player: Player) : boolean {
-    return player.getAverageKdaRate() > CONFIG.minQuiteInterKda && player.getAverageKdaRate() <= CONFIG.maxQuiteInterKda
+    return player.kdaRate > CONFIG.minQuiteInterKda && player.kdaRate <= CONFIG.maxQuiteInterKda
   }
   isRandomPlayerKDA(player: Player) : boolean {
-    return player.getAverageKdaRate() > CONFIG.minRandomPlayerKda && CONFIG.maxRandomPlayerKda
+    return player.kdaRate > CONFIG.minRandomPlayerKda && CONFIG.maxRandomPlayerKda
   }
   isQuiteCarryKDA(player: Player) : boolean {
 
-    return player.getAverageKdaRate() > CONFIG.minQuiteCarryKda && player.getAverageKdaRate() <= CONFIG.maxQuiteCarryKda
+    return player.kdaRate > CONFIG.minQuiteCarryKda && player.kdaRate <= CONFIG.maxQuiteCarryKda
   }
   isHyperCarryKDA(player: Player) : boolean {
-    return player.getAverageKdaRate() > CONFIG.minHyperCarryKda
+    return player.kdaRate > CONFIG.minHyperCarryKda
+  }
+
+  
+  getRankedPositionPicture(player: Player, match: Match) {
+    let tier = CONFIG.rankedPositionTier[player.tier]
+    tier = tier ? tier : player.tier
+    let lane = CONFIG.rankedPositionLane[CoreService.capitalize(match.lane)]
+    lane = lane ? lane : CoreService.capitalize(match.lane)
+  
+    return CONFIG.rankedPositionLabel 
+    + tier
+    + '-' 
+    + lane
+    + CONFIG.rankedPositionsExtension
   }
 
 }
