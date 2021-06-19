@@ -6,6 +6,7 @@ import { concatMap, map, switchMap } from "rxjs/operators";
 import { from } from 'rxjs';
 import { RiotGames } from "../../../types/riot-games/riot-games";
 import { environment } from '../../../environments/environment';
+import { MatchToCSV } from '../models/match-to-csv';
 
 @Injectable({
   providedIn: 'root'
@@ -15,67 +16,23 @@ export class MatchesService {
   public matches$: Subject<RiotGames.Match.MatchDetail[]> = new Subject()
 
   constructor(private http: HttpClient) {
-    
+
   }
 
-  updateMatchesToCSV(matchAmount: number) {
-    let matchesRequest$: Observable<any>[] = []
-
-    this.getSummoner(environment.CREDENTIALS.summonerName).pipe(
-      switchMap((data: any) => this.getLastMatchIdList(CONFIG.matchStartIndex, matchAmount, data)),
-      switchMap((response: any) => from(response.matches)),
-      map((match: RiotGames.Match.MatchDetail) => matchesRequest$.push(this.getMatchById(match.gameId))),
-      switchMap(() => forkJoin(matchesRequest$)),
-    ).subscribe((matches: RiotGames.Match.MatchDetail[]) => this.addMatch(matches))
-  }
-
-  getLastMatchIdList(start: number, count: number, account: any) {
+  getMatchesToCSV(start: number, count: number) {
     let param = new HttpParams()
     param = param.append('endIndex', `${count}`)
     param = param.append('beginIndex', `${start}`)
     param = param.append('queue', `${CONFIG.rankedQueueId}`)
 
-    let url = CONFIG.apiUrlMatchesByAccountId 
-      + account.accountId
+    let url = CONFIG.apiMatchToCsvUrl
 
-    return this.http.get<RiotGames.MatchList.MatchList>(url, { params: param })
+    return this.http.get<MatchToCSV>(url, { params: param })
   }
 
-  getMatchListByChampId(id: number, account: any) {
-    let param = new HttpParams()
-    param = param.append('queue', `${CONFIG.rankedQueueId}`)
-    param = param.append('champion', id)
+  getSummoners(summonerNames: string[]) {
+    let url = CONFIG.apiSummonersUrl
 
-    let url = CONFIG.apiUrlMatchesByAccountId 
-      + account.accountId
-
-    return this.http.get<RiotGames.MatchList.MatchList>(url, { params: param })
-  }
-
-  getMatchById(id: number) {
-    let url = CONFIG.apiUrlMatchesById + id
-
-    return this.http.get<RiotGames.Match.MatchDetail>(url);
-  }
-
-  getSummoner(summonerName: string) {
-    let url = CONFIG.apiUrlGetSummoner + summonerName
-
-    return this.http.get<RiotGames.Summoner.SummonerDto>(url);
-  }
-
-  getSummonerLeague(id: string) {
-    let url = CONFIG.apiUrlGetSummonerLeague + id
-
-    return this.http.get<RiotGames.League.LeagueDto[]>(url);
-  }
-
-  addMatch(matches: RiotGames.Match.MatchDetail[]) {
-    this.matches = matches
-    this.notifyMatchesChanged()
-  }
-  
-  notifyMatchesChanged() {
-    this.matches$.next(this.matches.slice()) 
+    return this.http.post<any[]>(url, { names: summonerNames })
   }
 }

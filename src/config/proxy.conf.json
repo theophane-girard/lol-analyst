@@ -1,8 +1,0 @@
-{
-    "/lol/*": {
-      "target": "https://euw1.api.riotgames.com",
-      "secure": false,
-      "changeOrigin": true,
-      "logLevel": "debug"
-    }
-}

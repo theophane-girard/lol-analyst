@@ -30,7 +30,7 @@ export class MatchListComponent implements OnInit {
     this.form = new FormGroup({
       matchAmount: new FormControl(environment.matchAmount)
     })
-    this.matchService.matches$.subscribe(matches => this.generateCSVData(matches))
+    // this.matchService.matches$.subscribe(matches => this.generateCSVData(matches))
   }
 
   generateCSVData(matches: RiotGames.Match.MatchDetail[]): void {
@@ -83,7 +83,8 @@ export class MatchListComponent implements OnInit {
     this.matchesToCSV.push(matchToCSV)
   }
 
-  updateMatchesToCSV() {
-    this.matchService.updateMatchesToCSV(this.form.controls.matchAmount.value)
+  getMatchToCSV() {
+    // this.matchService.getMatchesToCSV(CONFIG.matchStartIndex, this.form.controls.matchAmount.value).subscribe((data: MatchToCSV) => this.matchesToCSV = data);
+    
   }
 }

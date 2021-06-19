@@ -49,28 +49,10 @@ export class MultipleSearchComponent implements OnInit {
       return
     }
     let playerResquests: Observable<any>[] = []
-    
-    // playerNames = playerNames.filter(name => name.replace(/\s/g, '') !== environment.CREDENTIALS.summonerName.replace(/\s/g, ''))
-    playerNames.forEach(name => {
-      let currentSummoner: Player
-      let currentMatches: any
-      let matchesRequest$: Observable<any>[] = []
-      let playerRequest$ = this.matchService.getSummoner(name).pipe(
-        tap((summoner: RiotGames.Summoner.SummonerDto) => currentSummoner = Player.factory(summoner)),
-        switchMap(() => this.matchService.getSummonerLeague(currentSummoner.id)),
-        tap((league: RiotGames.League.LeagueDto[]) => currentSummoner.league = league),
-        switchMap(() => of(currentSummoner)),
-        switchMap(summoner => this.matchService.getLastMatchIdList(CONFIG.matchStartIndex, environment.matchAmount, summoner)),
-        tap((matches: RiotGames.MatchList.MatchList) => currentMatches = matches.matches),
-        switchMap((matches: any) => from(matches.matches)),
-        map((match: RiotGames.MatchList.MatchReference) => matchesRequest$.push(this.matchService.getMatchById(match.gameId))),
-        switchMap(() => forkJoin(matchesRequest$)),
-        map((matches: RiotGames.Match.MatchDetail[]) => this.addToRankedData(matches, currentSummoner, currentMatches)))
-
-        playerResquests.push(playerRequest$)
-    });
-
-    forkJoin(playerResquests).subscribe(() => this.formatPlayers())
+    this.matchService.getSummoners(playerNames).subscribe(players => {
+      this.players = players
+      this.loading = false
+    })
   }
 
   getPlayerNames(players: string) : string[] {
@@ -81,65 +63,6 @@ export class MultipleSearchComponent implements OnInit {
     }
 
     return []
-  }
-
-  addLeagueData(league: any, currentSummoner: any): Observable<any> {
-    currentSummoner.league = league
-    return from(currentSummoner)
-  }
-
-  addToRankedData(matches: RiotGames.Match.MatchDetail[], currentSummoner, currentMatches: RiotGames.MatchList.MatchReference[]): void {
-    if (this.players.every(player => player.id !== currentSummoner.id)) {
-      this.players.push(currentSummoner)
-    }
-    let player = this.players.find(p => p.id === currentSummoner.id)
-    if (!player.matches) {
-      player.matches = []
-    }
-    matches.map(match => {
-      let m = Match.factory(match)
-      let mappingMatch = currentMatches.find(pMatch => pMatch.gameId === match.gameId)
-      m.role = mappingMatch.role
-      m.champion = mappingMatch.champion
-      m.lane = mappingMatch.lane
-      player.matches.push(m)
-    })
-
-  }
-
-  formatPlayers(): void {
-    this.players = this.players.map((player: Player) => {
-      player.winrate = Math.round((100 * player.getWins()) / (player.getWins() + player.getLosses()) * 10) / 10
-      player.labels = this.setPlayerLabels(player)
-      return player
-    })
-    this.loading = false
-  }
-
-  setPlayerLabels(player: Player): Label[] {
-    let labelList: Label[] = []
-
-    if (player.summonerLevel < CONFIG.newAccountValue) {
-      labelList.push(Label.factory('newAccount'))
-    }
-
-    if (player.getAverageKdaRate() < CONFIG.maxInterKda) {
-      labelList.push(Label.factory('inter'))
-    }
-
-    if (player.getAverageKdaRate() > CONFIG.minQuiteCarryKda && player.getAverageKdaRate() <= CONFIG.maxQuiteCarryKda) {
-      labelList.push(Label.factory('carry'))
-    }
-
-    if (player.getAverageKdaRate() > CONFIG.minHyperCarryKda) {
-      labelList.push(Label.factory('hyperCarry'))
-    }
-
-    if (player.winrate <= CONFIG.maxInterWinRate) {
-      labelList.push(Label.factory('troll'))
-    }
-
-    return labelList
   }
 
   isInterWinRate(winrate: number) : boolean{

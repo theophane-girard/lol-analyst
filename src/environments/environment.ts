@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   matchAmount: 3,
   ...CREDENTIALS,
-  riotBaseUrl: 'http://localhost:4200'
+  riotBaseUrl: 'http://localhost:5000'
 };
 
 /*

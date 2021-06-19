@@ -10,10 +10,10 @@
 <br>
 <div class="flex space-around" *ngIf="!loading">
   <div *ngFor="let player of players">
-    <div class="bold textAlignCenter textShadowBlack">{{player.getRank()}}</div>
+    <!-- <div class="bold textAlignCenter textShadowBlack">{{player.getRank()}}</div> -->
     <div class="textAlignCenter">
-      <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}"
-      class="rankedIcon">
+      <!-- <img src="../../../assets/ranked-emblems/Emblem_{{player.getTier()}}.png" alt="{{player.getTier()}}"
+      class="rankedIcon"> -->
     </div>
     <div class="bold textAlignCenter textShadowBlack">{{player.name}}</div>
     <div class="textAlignCenter textShadowWhite" [ngClass]="{ 
@@ -27,8 +27,8 @@
     </div>
     <div class="flex center bold">
       <div class="graphBar">
-        <div class="winGraphBar" [ngStyle]="{ 'width': player.winrate + '%'}">{{player.getWins() + 'V'}}</div>
-        {{ player.getLosses() + 'D' }}
+        <!-- <div class="winGraphBar" [ngStyle]="{ 'width': player.winrate + '%'}">{{player.getWins() + 'V'}}</div>
+        {{ player.getLosses() + 'D' }} -->
       </div>
       <div class="bold textShadowWhite" [ngClass]="{ 
         bigInter: isInterWinRate(player.winrate), 
@@ -46,7 +46,7 @@
       quiteCarry: isQuiteCarryKDA(player),
       hyperCarry: isHyperCarryKDA(player)
     }">
-      {{player.getAverageKda()}}
+      <!-- {{player.getAverageKda()}} -->
     </div>
     <div class="height12vh">
       <app-label *ngFor="let label of player.labels" [label]="label.name" [labelClasses]="label.labelClasses"></app-label>
@@ -63,8 +63,8 @@
           {{ match.getKDA(player.name) }}
         </div>
         <div class="">
-          <img [src]="'../../../assets/ranked-positions/' + player.getRankedPositionPicture(match)" alt="{{match.lane}}"
-            class="rankedIcon">
+          <!-- <img [src]="'../../../assets/ranked-positions/' + player.getRankedPositionPicture(match)" alt="{{match.lane}}"
+            class="rankedIcon"> -->
         </div>
         <div class="fontSize1p2vh">
           {{ match.gameCreation | date:'dd/MM HH:mm'}}
