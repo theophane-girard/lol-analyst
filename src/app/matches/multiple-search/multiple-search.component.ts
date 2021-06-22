@@ -33,7 +33,6 @@ export class MultipleSearchComponent implements OnInit {
     this.form = this.formBuilder.group({
       players: new FormControl(null, Validators.required)
     })
-    this.form.controls.players.valueChanges.subscribe(players => this.loadPlayerRankedData(players))
   }
 
   /**
@@ -52,6 +51,10 @@ export class MultipleSearchComponent implements OnInit {
     let playerResquests: Observable<any>[] = []
     this.matchService.getSummoners(playerNames).subscribe(players => {
       this.players = players
+      this.loading = false
+    },
+    error => {
+      console.error(error)
       this.loading = false
     })
   }
@@ -118,4 +121,7 @@ export class MultipleSearchComponent implements OnInit {
     + CONFIG.rankedPositionsExtension
   }
 
+  getSummonerStats() {
+    this.loadPlayerRankedData(this.form.controls.players.value)
+  }
 }

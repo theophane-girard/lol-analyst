@@ -7,6 +7,7 @@ import { from } from 'rxjs';
 import { RiotGames } from "../../../types/riot-games/riot-games";
 import { environment } from '../../../environments/environment';
 import { MatchToCSV } from '../models/match-to-csv';
+import { MatchCsvRequest } from '../models/match-csv-request';
 
 @Injectable({
   providedIn: 'root'
@@ -19,15 +20,12 @@ export class MatchesService {
 
   }
 
-  getMatchesToCSV(start: number, count: number) {
-    let param = new HttpParams()
-    param = param.append('endIndex', `${count}`)
-    param = param.append('beginIndex', `${start}`)
-    param = param.append('queue', `${CONFIG.rankedQueueId}`)
+  getMatchesToCSV(params: MatchCsvRequest) {
+    let body = params
 
     let url = CONFIG.apiMatchToCsvUrl
 
-    return this.http.get<MatchToCSV>(url, { params: param })
+    return this.http.post<MatchToCSV[]>(url, body)
   }
 
   getSummoners(summonerNames: string[]) {

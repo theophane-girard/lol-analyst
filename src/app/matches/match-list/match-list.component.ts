@@ -5,8 +5,9 @@ import { CONFIG } from '../../../config/config';
 import { formatDate, registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
 import { RiotGames } from '../../../types/riot-games/riot-games';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
+import { DateAdapter } from '@angular/material/core';
 registerLocaleData(localeFr);
 
 @Component({
@@ -22,13 +23,20 @@ export class MatchListComponent implements OnInit {
 
   constructor(
     private matchService: MatchesService,
-    private formBuilder: FormBuilder
-  ) { }
+    private formBuilder: FormBuilder,
+    private _adapter: DateAdapter<any>
+  ) {
+    this._adapter.setLocale('fr');
+  }
 
   ngOnInit() {
 
     this.form = new FormGroup({
-      matchAmount: new FormControl(environment.matchAmount)
+      name: new FormControl(),
+      beginIndex: new FormControl(CONFIG.matchStartIndex, [Validators.max(0), Validators.min(-100)]),
+      endIndex: new FormControl(environment.matchAmount, [Validators.min(0), Validators.max(100)]),
+      beginTime: new FormControl(),
+      endTime: new FormControl(),
     })
     // this.matchService.matches$.subscribe(matches => this.generateCSVData(matches))
   }
@@ -82,9 +90,7 @@ export class MatchListComponent implements OnInit {
     }
     this.matchesToCSV.push(matchToCSV)
   }
-
   getMatchToCSV() {
-    // this.matchService.getMatchesToCSV(CONFIG.matchStartIndex, this.form.controls.matchAmount.value).subscribe((data: MatchToCSV) => this.matchesToCSV = data);
-    
+    this.matchService.getMatchesToCSV(this.form.getRawValue()).subscribe((data: MatchToCSV[]) => this.matchesToCSV = data);
   }
 }

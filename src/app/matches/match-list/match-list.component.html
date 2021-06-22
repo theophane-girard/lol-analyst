@@ -2,20 +2,40 @@
   <h1>
     Liste des parties au format csv
   </h1>
-  <!-- <div class="flex space-around">
-    <form [formGroup]="form" class="form">
+  <div class="flex space-around">
+    <form [formGroup]="form" class="form flex flexDirectionColumn">
+      <mat-form-field appearance="fill">
+        <mat-label>Summoner Name</mat-label>
+        <input matInput type="string" formControlName="name" max="0">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Begin</mat-label>
+        <input matInput type="number" formControlName="beginIndex" max="0" min="-100">
+      </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Match amount</mat-label>
-        <input matInput type="number" formControlName="matchAmount" min="1">
+        <input matInput type="number" formControlName="endIndex" min="1" max="100">
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Begin Date</mat-label>
+        <input matInput formControlName="beginTime" [matDatepicker]="pickerBegin">
+        <mat-datepicker-toggle matSuffix [for]="pickerBegin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerBegin></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>End Date</mat-label>
+        <input matInput formControlName="endTime" [matDatepicker]="pickerEnd">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </mat-form-field>
+      <button mat-fab color="warn" aria-label="" [disabled]="!form.valid" (click)="getMatchToCSV()">
+        <mat-icon>update</mat-icon>
+      </button>
     </form>
-    <button mat-fab color="warn" aria-label="">
-      <mat-icon (click)="updateMatchesToCSV()">update</mat-icon>
-    </button>
   </div>
   <ul>
     <li *ngFor="let match of matchesToCSV">
       {{match.date + ';' + match.day + ';' + match.hour + ';' + match.win + ';' + match.gameNumber}}
     </li>
-  </ul> -->
+  </ul>
 </div>

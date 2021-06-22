@@ -51,3 +51,7 @@ button {
 :host ::ng-deep .height12vh {
   height: 12vh;
 }
+
+:host ::ng-deep .flexDirectionColumn {
+  flex-direction:column
+}

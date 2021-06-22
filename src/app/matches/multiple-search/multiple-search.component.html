@@ -6,6 +6,10 @@
       placeholder="Player 1 has joined the lobby Player 2 has joined the lobby..."
       class="playerListTextArea"></textarea>
   </mat-form-field>
+  <button mat-raised-button color="warn" aria-label="" [disabled]="!form.valid" (click)="getSummonerStats()">
+    Load Stats
+    <mat-icon>search</mat-icon>
+  </button>
 </form>
 <br>
 <div class="flex space-around" *ngIf="!loading">
