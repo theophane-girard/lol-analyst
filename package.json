@@ -8,9 +8,8 @@
     "lint": "ng lint",
     "config": "ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" ./src/config.index.ts",
     "build": "npm run config && ng build --prod",
-    "pree2e": "webdriver-manager update --versions.chrome 89.0.4389.114",
     "test:ci": "npm run config && ng test --no-watch --no-progress --browsers ChromeHeadlessCI",
-    "e2e:ci": "npm run config && ng e2e --protractor-config=e2e/protractor-ci.conf.js --webdriver-update=false",
+    "e2e:ci": "npm run config && ng e2e --protractor-config=e2e/protractor-ci.conf.js",
     "e2e": "ng e2e"
   },
   "typings": "./src/types/riot-games-api.d.ts",
