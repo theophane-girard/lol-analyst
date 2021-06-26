@@ -1,8 +1,12 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
-
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
+import { MaterialModule } from 'src/app/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatchListComponent } from './match-list.component';
+import { MatchesService } from '../services/matches.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 describe('MatchListComponent', () => {
   let component: MatchListComponent;
@@ -11,11 +15,23 @@ describe('MatchListComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MatchListComponent ],
-      imports: [HttpClientModule],
+      imports: [
+        HttpClientModule,
+        MaterialModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+      ],
       providers: [
         {
+          provide: MatchesService
+        },
+        {
           provide: FormBuilder
-        }
+        },
+        {
+          provide: MatDatepickerModule
+        },
       ]
     })
     .compileComponents();

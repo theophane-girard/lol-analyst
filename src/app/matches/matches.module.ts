@@ -12,7 +12,7 @@ import { LabelComponent } from './label/label.component';
   declarations: [MatchListComponent, MultipleSearchComponent, LabelComponent],
   imports: [
     CommonModule,
-    MaterialModule,    
+    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
   ],
