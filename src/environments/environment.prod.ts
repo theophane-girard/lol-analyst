@@ -2,7 +2,7 @@ import { CREDENTIALS } from "src/config/credentials";
 
 export const environment = {
   production: true,
-  matchAmount: 20,
+  matchAmount: 1,
   ...CREDENTIALS,
-  riotBaseUrl: 'https://inter-detector-api.web.app'
+  riotBaseUrl: 'http://theophane-girard.site/inter-detector-api'
 };

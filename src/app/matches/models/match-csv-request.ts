@@ -7,7 +7,7 @@ export class MatchCsvRequest {
     public season?: number,
     public endTime?: number,
     public beginTime?: number,
-    public endIndex: number = +(environment.MATCH_AMOUNT || 0),
+    public endIndex: number = +(environment.matchAmount || 0),
     public beginIndex: number = CONFIG.matchStartIndex,
     public name: string = ''
   ) {}
