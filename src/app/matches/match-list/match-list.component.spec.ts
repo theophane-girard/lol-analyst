@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatchListComponent } from './match-list.component';
 import { MatchesService } from '../services/matches.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('MatchListComponent', () => {
   let component: MatchListComponent;
@@ -32,6 +33,9 @@ describe('MatchListComponent', () => {
         {
           provide: MatDatepickerModule
         },
+        {
+          provide: MatSnackBar,
+        }
       ]
     })
     .compileComponents();

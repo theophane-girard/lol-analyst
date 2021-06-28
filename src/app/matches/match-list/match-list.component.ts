@@ -8,6 +8,7 @@ import { RiotGames } from '../../../types/riot-games/riot-games';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { DateAdapter } from '@angular/material/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 registerLocaleData(localeFr);
 
 @Component({
@@ -20,11 +21,13 @@ export class MatchListComponent implements OnInit {
   matches: RiotGames.Match.MatchDetail[] = []
   matchesToCSV: MatchToCSV[] = []
   form: FormGroup
+  isLoading: boolean = false
 
   constructor(
     private matchService: MatchesService,
     private formBuilder: FormBuilder,
-    private _adapter: DateAdapter<any>
+    private _adapter: DateAdapter<any>,
+    private _snackBar: MatSnackBar,
   ) {
     this._adapter.setLocale('fr');
   }
@@ -32,13 +35,12 @@ export class MatchListComponent implements OnInit {
   ngOnInit() {
 
     this.form = new FormGroup({
-      name: new FormControl(),
+      name: new FormControl(null, [Validators.required]),
       beginIndex: new FormControl(CONFIG.matchStartIndex, [Validators.max(0), Validators.min(-100)]),
       endIndex: new FormControl(environment.matchAmount, [Validators.min(0), Validators.max(100)]),
       beginTime: new FormControl(),
       endTime: new FormControl(),
     })
-    // this.matchService.matches$.subscribe(matches => this.generateCSVData(matches))
   }
 
   generateCSVData(matches: RiotGames.Match.MatchDetail[]): void {
@@ -90,7 +92,21 @@ export class MatchListComponent implements OnInit {
     }
     this.matchesToCSV.push(matchToCSV)
   }
+
   getMatchToCSV() {
-    this.matchService.getMatchesToCSV(this.form.getRawValue()).subscribe((data: MatchToCSV[]) => this.matchesToCSV = data);
+    this.isLoading = true
+    this.matchService.getMatchesToCSV(this.form.getRawValue()).subscribe(
+      (data: MatchToCSV[]) => {
+        this.matchesToCSV = data
+        this.isLoading = false
+      },
+      error => {
+        console.error(error)
+        this._snackBar.open(CONFIG.noMatchFoundMessage, CONFIG.closeLabel, {
+          duration: CONFIG.notificationDuration,
+        })
+        this.isLoading = false
+      }
+    );
   }
 }

@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
     providedIn: 'root'
 })
 export class CoreService {
-    static capitalize(word: string) : string {
-        const lower = word.toLowerCase()
-        return word.charAt(0).toUpperCase() + lower.slice(1)
-    }
+  static capitalize(word: string) : string {
+      const lower = word.toLowerCase()
+      return word.charAt(0).toUpperCase() + lower.slice(1)
+  }
 }

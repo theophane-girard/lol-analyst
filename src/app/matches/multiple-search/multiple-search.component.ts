@@ -11,6 +11,7 @@ import { environment } from "../../../environments/environment";
 import { ChampionsService } from '../services/champions.service';
 import { Label } from '../models/label';
 import { CoreService } from 'src/app/core/service/CoreService.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-multiple-search',
   templateUrl: './multiple-search.component.html',
@@ -21,12 +22,13 @@ export class MultipleSearchComponent implements OnInit {
   form: FormGroup
   players: Player[] = []
   public formattedPlayers: any
-  loading: boolean = false
+  isLoading: boolean = false
 
   constructor(
     private formBuilder: FormBuilder,
     private matchService: MatchesService,
-    public championsService: ChampionsService
+    public championsService: ChampionsService,
+    private _snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -42,21 +44,24 @@ export class MultipleSearchComponent implements OnInit {
    * @returns 
    */
   loadPlayerRankedData(players: string): void {
-    this.loading = true
+    this.isLoading = true
     let playerNames: string[] = this.getPlayerNames(players)
     if (playerNames.length === 0) {
-      console.error('pas de joueur')
+      this._snackBar.open(CONFIG.noPlayerGivenMessage, CONFIG.closeLabel, {
+        duration: CONFIG.notificationDuration,
+      })
       return
     }
-    let playerResquests: Observable<any>[] = []
-    this.matchService.getSummoners(playerNames).subscribe(players => {
-      this.players = players
-      this.loading = false
-    },
-    error => {
-      console.error(error)
-      this.loading = false
-    })
+    this.matchService.getSummoners(playerNames).subscribe(
+      players => {
+        this.players = players
+        this.isLoading = false
+      },
+      error => {
+        console.error(error)
+        this.isLoading = false
+      }
+    )
   }
 
   getPlayerNames(players: string) : string[] {

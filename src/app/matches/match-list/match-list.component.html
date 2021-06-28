@@ -28,14 +28,17 @@
         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
         <mat-datepicker #pickerEnd></mat-datepicker>
       </mat-form-field>
-      <button mat-fab color="warn" aria-label="" [disabled]="!form.valid" (click)="getMatchToCSV()">
+      <button mat-fab color="warn" aria-label="" [disabled]="!form.valid || isLoading" (click)="getMatchToCSV()">
         <mat-icon>update</mat-icon>
       </button>
     </form>
   </div>
-  <ul>
+  <ul *ngIf="!isLoading">
     <li *ngFor="let match of matchesToCSV">
       {{match.date + ';' + match.day + ';' + match.hour + ';' + match.win + ';' + match.gameNumber}}
     </li>
   </ul>
+  <div class="flex space-around" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
 </div>
