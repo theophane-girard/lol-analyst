@@ -61,8 +61,12 @@ export const CONFIG: any = {
   },
   newAccountValue: 100,
   unrankedLabel: 'unranked',
-  noMatchFoundMessage: 'No match found',
   closeLabel: 'close',
   notificationDuration: 2000,
-  noPlayerGivenMessage: 'No player given'
+  errorMessages: {
+    noMatchFoundMessage: 'No match found',
+    noPlayerGivenMessage: 'No player given',
+    dateRangeGreaterThanOneWeek: `Time range can't be greater than 1 week`,
+    beginDateGreaterThanEndDate: `Begin time can't be greater than End Time`,
+  }
 }

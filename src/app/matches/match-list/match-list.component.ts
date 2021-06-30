@@ -9,6 +9,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { environment } from '../../../environments/environment';
 import { DateAdapter } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { beginDateGreaterThanEndDate, dateRangeGreaterThanOneWeek } from 'src/app/core/validators/date';
+import { CoreService } from 'src/app/core/service/CoreService.service';
 registerLocaleData(localeFr);
 
 @Component({
@@ -40,6 +42,18 @@ export class MatchListComponent implements OnInit {
       endIndex: new FormControl(environment.matchAmount, [Validators.min(0), Validators.max(100)]),
       beginTime: new FormControl(),
       endTime: new FormControl(),
+    },
+    {
+      validators: [
+        dateRangeGreaterThanOneWeek('beginTime', 'endTime'),
+        beginDateGreaterThanEndDate('beginTime', 'endTime')
+      ]
+    })
+
+    this.form.valueChanges.subscribe(data => {
+      let errors: any = {...this.form.errors, ...CoreService.collectFormErrors(this.form)}
+      this.form.setErrors(Object.keys(errors).length !== 0 ? errors : null)
+      console.log(this.form.errors)
     })
   }
 
