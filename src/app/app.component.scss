@@ -58,3 +58,7 @@ button {
 :host ::ng-deep .flexDirectionColumn {
   flex-direction:column
 }
+
+:host ::ng-deep .margin2Vh {
+  margin: 2vh;
+}

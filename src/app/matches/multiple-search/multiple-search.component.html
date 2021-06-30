@@ -1,15 +1,19 @@
-<form [formGroup]="form" class="form">
-  <h2>Liste des joueurs</h2>
+<form [formGroup]="form" class="margin2Vh">
+  <div class="flex justifyContentCenter">
+    <h1>Liste des joueurs</h1>
+  </div>
   <mat-form-field class="textarea" appearance="fill">
     <mat-label class="label">Liste des joueurs</mat-label>
     <textarea formControlName="players" minRows="5" matAutosizeMinRows="5" rows="5" matInput
       placeholder="Player 1 has joined the lobby Player 2 has joined the lobby..."
       class="playerListTextArea"></textarea>
   </mat-form-field>
-  <button mat-raised-button id="loadStatsButton" color="warn" aria-label="" [disabled]="!form.valid || isLoading" (click)="getSummonerStats()">
-    Load Stats
-    <mat-icon>search</mat-icon>
-  </button>
+  <div>
+    <button mat-raised-button id="loadStatsButton" color="warn" aria-label="" [disabled]="!form.valid || isLoading" (click)="getSummonerStats()">
+      Load Stats
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
 </form>
 <br>
 <div class="flex space-around" *ngIf="!isLoading">

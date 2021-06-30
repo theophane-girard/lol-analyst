@@ -1,11 +1,11 @@
 :host {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: flex-start;
 }
 
 form {
-  width: 100%;
+  flex: 0.3;
 }
 
 .selectionRange {
