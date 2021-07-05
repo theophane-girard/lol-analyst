@@ -62,3 +62,7 @@ button {
 :host ::ng-deep .margin2Vh {
   margin: 2vh;
 }
+
+:host ::ng-deep .justifyContentSpaceBetween {
+  justify-content: space-between;
+}

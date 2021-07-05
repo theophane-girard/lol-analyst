@@ -1,15 +1,13 @@
 import { AbstractControl, FormGroup, ValidatorFn } from "@angular/forms";
 import { CONFIG } from "src/config/config";
+import { CoreService } from "../service/CoreService.service";
 
 export function dateRangeGreaterThanOneWeek(begin: string, end: string): ValidatorFn {
   return (control: FormGroup) : {[key: string] : any} | null => {
     if (!control.controls[begin].value || !control.controls[end].value) {
       return null
     }
-    let dayInMs = 1000 * 60 * 60 * 24
-    let beginDate = new Date(control.controls[begin].value)
-    let endDate = new Date(control.controls[end].value)
-    let dayDiff = Math.round(endDate.getTime() - beginDate.getTime()) / (dayInMs)
+    let dayDiff = CoreService.getDayDiff(control.controls[begin].value, control.controls[end].value)
     return dayDiff > 7 ? { 
       'dateRangeGreaterThanOneWeek': {
         msg: CONFIG.errorMessages.dateRangeGreaterThanOneWeek,

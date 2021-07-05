@@ -31,4 +31,12 @@ export class CoreService {
       return control.errors;
     }
   }
+
+  static getDayDiff(begin, end) : number {
+    let dayInMs = 1000 * 60 * 60 * 24
+    let beginDate = new Date(begin)
+    let endDate = new Date(end)
+    let dayDiff = Math.round(endDate.getTime() - beginDate.getTime()) / (dayInMs)
+    return dayDiff
+  }
 }

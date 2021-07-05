@@ -9,7 +9,22 @@ form {
 }
 
 .selectionRange {
-  background-color: red;
+  background-color: #c2185b;
   height: 100%;
   width: 1em;
+  border-radius: 7px;
+}
+
+.selection {
+  background-color: rgb(3, 83, 175);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  width: 1em;
+  border-radius: 7px;
+}
+
+#timeLadder {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

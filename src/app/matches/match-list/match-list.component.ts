@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatchesService } from '../services/matches.service';
 import { MatchToCSV } from '../models/match-to-csv';
 import { CONFIG } from '../../../config/config';
@@ -11,19 +11,54 @@ import { DateAdapter } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { beginDateGreaterThanEndDate, dateRangeGreaterThanOneWeek } from 'src/app/core/validators/date';
 import { CoreService } from 'src/app/core/service/CoreService.service';
+import { trigger, style, state, transition, animate } from '@angular/animations';
+import { pairwise, startWith } from 'rxjs/operators';
 registerLocaleData(localeFr);
 
 @Component({
   selector: 'app-match-list',
   templateUrl: './match-list.component.html',
-  styleUrls: ['./match-list.component.scss']
+  styleUrls: ['./match-list.component.scss'],
+  animations: [
+    trigger('heightAnimation', [
+      state('*', style({
+        height: '{{ height }}px'
+      }), { params: { height: '0px' }}),
+      transition('* => *', [
+        animate('0.5s')
+      ])
+    ]),
+    trigger('marginTopAnimation', [
+      state('*', style({
+        marginTop: '{{ margin }}px'
+      }), { params: { margin: '0px' }}),
+      transition('* => *', [
+        animate('0.5s')
+      ])
+    ]),
+    trigger('marginBotAnimation', [
+      state('*', style({
+        marginBottom: '{{ margin }}px'
+      }), { params: { margin: '0px' }}),
+      transition('* => *', [
+        animate('0.5s')
+      ])
+    ]),
+  ]
 })
-export class MatchListComponent implements OnInit {
+export class MatchListComponent implements OnInit, AfterViewInit {
   CREDENTIALS = environment.CREDENTIALS
   matches: RiotGames.Match.MatchDetail[] = []
   matchesToCSV: MatchToCSV[] = []
   form: FormGroup
   isLoading: boolean = false
+  today: Date = new Date()
+  defaultEndDate: Date = new Date(new Date().setMonth(new Date().getMonth() - 2));
+  @ViewChild('timeSelection') timeSelection: ElementRef
+  maxHeight
+  marginTop
+  marginBot
+  height
 
   constructor(
     private matchService: MatchesService,
@@ -32,6 +67,12 @@ export class MatchListComponent implements OnInit {
     private _snackBar: MatSnackBar,
   ) {
     this._adapter.setLocale('fr');
+    this.today.setHours(0,0,0,0)
+    this.defaultEndDate.setHours(0,0,0,0)
+  }
+
+  ngAfterViewInit(): void {
+    this.maxHeight = this.timeSelection?.nativeElement.offsetHeight
   }
 
   ngOnInit() {
@@ -40,8 +81,8 @@ export class MatchListComponent implements OnInit {
       name: new FormControl(null, [Validators.required]),
       beginIndex: new FormControl(CONFIG.matchStartIndex, [Validators.max(0), Validators.min(-100)]),
       endIndex: new FormControl(environment.matchAmount, [Validators.min(0), Validators.max(100)]),
-      beginTime: new FormControl(),
-      endTime: new FormControl(),
+      beginTime: new FormControl(null, [Validators.max(this.today.getTime())]),
+      endTime: new FormControl(null, [Validators.max(this.today.getTime())]),
     },
     {
       validators: [
@@ -54,6 +95,31 @@ export class MatchListComponent implements OnInit {
       let errors: any = {...this.form.errors, ...CoreService.collectFormErrors(this.form)}
       this.form.setErrors(Object.keys(errors).length !== 0 ? errors : null)
       console.log(this.form.errors)
+    })
+
+    this.form.controls.beginTime.valueChanges.pipe(
+      startWith(undefined), 
+      pairwise()
+    ).subscribe(valuesArray => {
+      const newVal = valuesArray[1];
+      const oldVal = valuesArray[0];
+      if (newVal !== oldVal) {
+        this.marginTop = this.getMarginTopPx(this.form.controls.endTime.value)
+        this.marginBot = this.getMarginBotPx(newVal)
+        this.height = this.getHeightMatches()
+      }
+    })
+    this.form.controls.endTime.valueChanges.pipe(
+      startWith(undefined), 
+      pairwise()
+    ).subscribe(valuesArray => {
+      const newVal = valuesArray[1];
+      const oldVal = valuesArray[0];
+      if (newVal !== oldVal) {
+        this.marginTop = this.getMarginTopPx(newVal)
+        this.marginBot = this.getMarginBotPx(this.form.controls.beginTime.value)
+        this.height = this.getHeightMatches()
+      }
     })
   }
 
@@ -122,5 +188,54 @@ export class MatchListComponent implements OnInit {
         this.isLoading = false
       }
     );
+  }
+
+  getMarginTopPx(date: Date) {
+    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultEndDate))
+    let dayDiffThanToday = Math.round(CoreService.getDayDiff(this.today, date))
+    let maxHeight = this.timeSelection?.nativeElement.offsetHeight
+    if (!date) {
+      return 0
+    }
+    return Math.round(Math.abs(dayDiffThanToday * maxHeight / maxDays))
+  }
+
+  getHeightMatches() {
+    let beginDate = this.form.controls.beginTime.value
+    let endDate = this.form.controls.endTime.value
+    let dayDiff = Math.round(CoreService.getDayDiff(beginDate, endDate))
+    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultEndDate))
+    let maxHeight = this.timeSelection?.nativeElement.offsetHeight
+
+    if (!beginDate && !endDate) {
+      return 0
+    }
+
+    if (beginDate && !endDate) {
+      dayDiff = Math.round(CoreService.getDayDiff(beginDate, this.today))
+      return Math.round(Math.abs(dayDiff *  maxHeight / maxDays))
+    }
+
+    if (!beginDate && endDate ) {
+      dayDiff = Math.round(CoreService.getDayDiff(this.defaultEndDate, endDate))
+      return Math.round(Math.abs(dayDiff *  maxHeight / maxDays))
+    }
+    return Math.round(Math.abs(dayDiff *  maxHeight / maxDays))
+  }
+
+  getMarginBotPx(date: Date) {
+    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultEndDate))
+    let dayDiffThanMax = Math.round(CoreService.getDayDiff(this.defaultEndDate, date))
+    let maxHeight = this.timeSelection?.nativeElement.offsetHeight
+    if (!date) {
+      return 0
+    }
+    if (date && !this.form.controls.endTime.value) {
+      return 0
+    }
+    if (date.getTime() === this.defaultEndDate.getTime()) {
+      return 0
+    }
+    return  maxHeight - (Math.round(Math.abs((dayDiffThanMax *  maxHeight / maxDays))) + this.getHeightMatches())
   }
 }
