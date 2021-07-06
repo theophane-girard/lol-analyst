@@ -53,12 +53,12 @@ export class MatchListComponent implements OnInit, AfterViewInit {
   form: FormGroup
   isLoading: boolean = false
   today: Date = new Date()
-  defaultEndDate: Date = new Date(new Date().setMonth(new Date().getMonth() - 2));
+  defaultMinDate: Date = new Date(new Date().setMonth(new Date().getMonth() - 2));
   @ViewChild('timeSelection') timeSelection: ElementRef
-  maxHeight
-  marginTop
-  marginBot
-  height
+  maxHeight: number = 0
+  marginTop: number = 0
+  marginBot: number = 0
+  height: number = 0
 
   constructor(
     private matchService: MatchesService,
@@ -68,7 +68,7 @@ export class MatchListComponent implements OnInit, AfterViewInit {
   ) {
     this._adapter.setLocale('fr');
     this.today.setHours(0,0,0,0)
-    this.defaultEndDate.setHours(0,0,0,0)
+    this.defaultMinDate.setHours(0,0,0,0)
   }
 
   ngAfterViewInit(): void {
@@ -104,6 +104,9 @@ export class MatchListComponent implements OnInit, AfterViewInit {
       const newVal = valuesArray[1];
       const oldVal = valuesArray[0];
       if (newVal !== oldVal) {
+        if (newVal < this.defaultMinDate) {
+          this.defaultMinDate = newVal
+        }
         this.marginTop = this.getMarginTopPx(this.form.controls.endTime.value)
         this.marginBot = this.getMarginBotPx(newVal)
         this.height = this.getHeightMatches()
@@ -191,7 +194,7 @@ export class MatchListComponent implements OnInit, AfterViewInit {
   }
 
   getMarginTopPx(date: Date) {
-    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultEndDate))
+    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultMinDate))
     let dayDiffThanToday = Math.round(CoreService.getDayDiff(this.today, date))
     let maxHeight = this.timeSelection?.nativeElement.offsetHeight
     if (!date) {
@@ -204,7 +207,7 @@ export class MatchListComponent implements OnInit, AfterViewInit {
     let beginDate = this.form.controls.beginTime.value
     let endDate = this.form.controls.endTime.value
     let dayDiff = Math.round(CoreService.getDayDiff(beginDate, endDate))
-    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultEndDate))
+    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultMinDate))
     let maxHeight = this.timeSelection?.nativeElement.offsetHeight
 
     if (!beginDate && !endDate) {
@@ -217,25 +220,27 @@ export class MatchListComponent implements OnInit, AfterViewInit {
     }
 
     if (!beginDate && endDate ) {
-      dayDiff = Math.round(CoreService.getDayDiff(this.defaultEndDate, endDate))
+      dayDiff = Math.round(CoreService.getDayDiff(this.defaultMinDate, endDate))
       return Math.round(Math.abs(dayDiff *  maxHeight / maxDays))
     }
     return Math.round(Math.abs(dayDiff *  maxHeight / maxDays))
   }
 
   getMarginBotPx(date: Date) {
-    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultEndDate))
-    let dayDiffThanMax = Math.round(CoreService.getDayDiff(this.defaultEndDate, date))
+    let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultMinDate))
+    let dayDiffThanMax = Math.round(CoreService.getDayDiff(this.defaultMinDate, date))
     let maxHeight = this.timeSelection?.nativeElement.offsetHeight
+
     if (!date) {
       return 0
     }
     if (date && !this.form.controls.endTime.value) {
       return 0
     }
-    if (date.getTime() === this.defaultEndDate.getTime()) {
+    if (date.getTime() === this.defaultMinDate.getTime()) {
       return 0
     }
+
     return  maxHeight - (Math.round(Math.abs((dayDiffThanMax *  maxHeight / maxDays))) + this.getHeightMatches())
   }
 }

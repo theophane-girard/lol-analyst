@@ -30,38 +30,6 @@
         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
         <mat-datepicker #pickerEnd></mat-datepicker>
       </mat-form-field>
-      <ul *ngIf="form.errors">
-        <li *ngIf="form.errors.dateRangeGreaterThanOneWeek">
-          <h2>{{ form.errors.dateRangeGreaterThanOneWeek.msg }} (given : {{ form.errors.dateRangeGreaterThanOneWeek.data
-            }} days)</h2>
-        </li>
-        <li *ngIf="form.errors.beginDateGreaterThanEndDate">
-          <h2>{{ form.errors.beginDateGreaterThanEndDate.msg }}</h2>
-        </li>
-        <li *ngIf="form.errors.endIndex">
-          <div *ngIf="form.errors.endIndex.min">
-            <h2>Match amount must be at least {{ form.errors.endIndex.min.min }} (given : {{
-              form.errors.endIndex.min.actual }})</h2>
-          </div>
-          <div *ngIf="form.errors.endIndex.max">
-            <h2>Match amount must be lower-than/equals {{ form.errors.endIndex.max.max }} (given : {{
-              form.errors.endIndex.max.actual }})</h2>
-          </div>
-        </li>
-        <li *ngIf="form.errors.beginIndex">
-          <div *ngIf="form.errors.beginIndex.min">
-            <h2>Begin must be at least {{ form.errors.beginIndex.min.min }} (given : {{
-              form.errors.beginIndex.min.actual }})</h2>
-          </div>
-          <div *ngIf="form.errors.beginIndex.max">
-            <h2>Begin must be lower-than/equals {{ form.errors.beginIndex.max.max }} (given : {{
-              form.errors.beginIndex.max.actual }})</h2>
-          </div>
-        </li>
-        <li *ngIf="form.errors.name">
-          <h2>Summoner Name is missing</h2>
-        </li>
-      </ul>
       <br>
       <button mat-fab color="warn" aria-label="" [disabled]="!form.valid || isLoading" (click)="getMatchToCSV()">
         <mat-icon>update</mat-icon>
@@ -73,7 +41,7 @@
           Today ({{ today | date:'dd/MM/YYYY' }})
         </div>
         <div>
-          Past ({{ defaultEndDate | date:'dd/MM/YYYY' }})
+          Past ({{ defaultMinDate | date:'dd/MM/YYYY' }})
         </div>
       </div>
       <div class="selectionRange flex">
@@ -107,4 +75,37 @@
       </div>
     </div>
   </div>
+  <br>
+  <ul *ngIf="form.errors" class="flex space-around">
+    <li *ngIf="form.errors.dateRangeGreaterThanOneWeek">
+      <h2>{{ form.errors.dateRangeGreaterThanOneWeek.msg }} (given : {{ form.errors.dateRangeGreaterThanOneWeek.data
+        }} days)</h2>
+    </li>
+    <li *ngIf="form.errors.beginDateGreaterThanEndDate">
+      <h2>{{ form.errors.beginDateGreaterThanEndDate.msg }}</h2>
+    </li>
+    <li *ngIf="form.errors.endIndex">
+      <div *ngIf="form.errors.endIndex.min">
+        <h2>Match amount must be at least {{ form.errors.endIndex.min.min }} (given : {{
+          form.errors.endIndex.min.actual }})</h2>
+      </div>
+      <div *ngIf="form.errors.endIndex.max">
+        <h2>Match amount must be lower-than/equals {{ form.errors.endIndex.max.max }} (given : {{
+          form.errors.endIndex.max.actual }})</h2>
+      </div>
+    </li>
+    <li *ngIf="form.errors.beginIndex">
+      <div *ngIf="form.errors.beginIndex.min">
+        <h2>Begin must be at least {{ form.errors.beginIndex.min.min }} (given : {{
+          form.errors.beginIndex.min.actual }})</h2>
+      </div>
+      <div *ngIf="form.errors.beginIndex.max">
+        <h2>Begin must be lower-than/equals {{ form.errors.beginIndex.max.max }} (given : {{
+          form.errors.beginIndex.max.actual }})</h2>
+      </div>
+    </li>
+    <li *ngIf="form.errors.name">
+      <h2>Summoner Name is missing</h2>
+    </li>
+  </ul>
 </div>
