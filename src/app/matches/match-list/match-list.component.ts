@@ -44,6 +44,17 @@ registerLocaleData(localeFr);
         animate('0.5s')
       ])
     ]),
+    trigger('queryVisuLabelOpacity', [
+      state('visible', style({
+        opacity: 1
+      })),
+      state('invisible', style({
+        opacity: 0
+      })),
+      transition('* => *', [
+        animate('1s')
+      ])
+    ]),
   ]
 })
 export class MatchListComponent implements OnInit, AfterViewInit {
@@ -59,6 +70,7 @@ export class MatchListComponent implements OnInit, AfterViewInit {
   marginTop: number = 0
   marginBot: number = 0
   height: number = 0
+  queryVisuLabelVisible: boolean = false
 
   constructor(
     private matchService: MatchesService,
@@ -104,12 +116,11 @@ export class MatchListComponent implements OnInit, AfterViewInit {
       const newVal = valuesArray[1];
       const oldVal = valuesArray[0];
       if (newVal !== oldVal) {
-        if (newVal < this.defaultMinDate) {
-          this.defaultMinDate = newVal
-        }
+        this.adaptScale()
         this.marginTop = this.getMarginTopPx(this.form.controls.endTime.value)
         this.marginBot = this.getMarginBotPx(newVal)
         this.height = this.getHeightMatches()
+        this.queryVisuLabelVisible = this.updateMatchesLabelState()
       }
     })
     this.form.controls.endTime.valueChanges.pipe(
@@ -119,9 +130,11 @@ export class MatchListComponent implements OnInit, AfterViewInit {
       const newVal = valuesArray[1];
       const oldVal = valuesArray[0];
       if (newVal !== oldVal) {
+        this.adaptScale()
         this.marginTop = this.getMarginTopPx(newVal)
         this.marginBot = this.getMarginBotPx(this.form.controls.beginTime.value)
         this.height = this.getHeightMatches()
+        this.queryVisuLabelVisible = this.updateMatchesLabelState()
       }
     })
   }
@@ -242,5 +255,31 @@ export class MatchListComponent implements OnInit, AfterViewInit {
     }
 
     return  maxHeight - (Math.round(Math.abs((dayDiffThanMax *  maxHeight / maxDays))) + this.getHeightMatches())
+  }
+
+  updateMatchesLabelState(): boolean {
+    if (!this.form.controls.beginTime.value && !this.form.controls.endTime.value) {
+      return false
+    }
+    return true
+  }
+
+  adaptScale() {
+    let beginTime: Date = this.form.controls.beginTime.value
+    let endTime: Date = this.form.controls.endTime.value
+    let beginEndTimeDayDiff
+    if (endTime) {
+      if (endTime < this.defaultMinDate) {
+        this.defaultMinDate = endTime
+      }
+    }
+    if (beginTime && endTime) {
+      beginEndTimeDayDiff = Math.abs(CoreService.getDayDiff(beginTime, endTime))
+      if(beginEndTimeDayDiff <= 9) {
+        let endTimeTodayDiff = Math.abs(CoreService.getDayDiff(endTime, this.today))
+        let result = new Date(beginTime.setDate(beginTime.getDate() - endTimeTodayDiff))
+        this.defaultMinDate = result
+      }
+    }
   }
 }

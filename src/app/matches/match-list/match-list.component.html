@@ -48,19 +48,19 @@
         <div class="selection"
           [@heightAnimation]="{ value: height, params: { height: height } }"
           [@marginTopAnimation]="{ value: marginTop, params: { margin: marginTop } }">
-          <div class="textAlignCenter">
-            matches
-          </div>
         </div>
       </div>
       <div #timeSelection class="flex flexDirectionColumn">
         <div [@heightAnimation]="{ value: height, params: { height: height } }"
           [@marginTopAnimation]="{ value: marginTop, params: { margin: marginTop } }"
           class="flex flexDirectionColumn justifyContentSpaceBetween">
-          <div>
+          <div [@queryVisuLabelOpacity]="queryVisuLabelVisible ? 'visible' : 'invisible'">
             {{ form.controls.endTime.value | date:'dd/MM/YYYY' }}
           </div>
-          <div>
+          <div class="textAlignCenter" [@queryVisuLabelOpacity]="queryVisuLabelVisible ? 'visible' : 'invisible'">
+            matches
+          </div>
+          <div [@queryVisuLabelOpacity]="queryVisuLabelVisible ? 'visible' : 'invisible'">
             {{ form.controls.beginTime.value | date:'dd/MM/YYYY' }}
           </div>
         </div>
@@ -76,36 +76,38 @@
     </div>
   </div>
   <br>
-  <ul *ngIf="form.errors" class="flex space-around">
-    <li *ngIf="form.errors.dateRangeGreaterThanOneWeek">
-      <h2>{{ form.errors.dateRangeGreaterThanOneWeek.msg }} (given : {{ form.errors.dateRangeGreaterThanOneWeek.data
-        }} days)</h2>
-    </li>
-    <li *ngIf="form.errors.beginDateGreaterThanEndDate">
-      <h2>{{ form.errors.beginDateGreaterThanEndDate.msg }}</h2>
-    </li>
-    <li *ngIf="form.errors.endIndex">
-      <div *ngIf="form.errors.endIndex.min">
-        <h2>Match amount must be at least {{ form.errors.endIndex.min.min }} (given : {{
-          form.errors.endIndex.min.actual }})</h2>
-      </div>
-      <div *ngIf="form.errors.endIndex.max">
-        <h2>Match amount must be lower-than/equals {{ form.errors.endIndex.max.max }} (given : {{
-          form.errors.endIndex.max.actual }})</h2>
-      </div>
-    </li>
-    <li *ngIf="form.errors.beginIndex">
-      <div *ngIf="form.errors.beginIndex.min">
-        <h2>Begin must be at least {{ form.errors.beginIndex.min.min }} (given : {{
-          form.errors.beginIndex.min.actual }})</h2>
-      </div>
-      <div *ngIf="form.errors.beginIndex.max">
-        <h2>Begin must be lower-than/equals {{ form.errors.beginIndex.max.max }} (given : {{
-          form.errors.beginIndex.max.actual }})</h2>
-      </div>
-    </li>
-    <li *ngIf="form.errors.name">
-      <h2>Summoner Name is missing</h2>
-    </li>
-  </ul>
+  <div class="flex flexDirectionColumn alignItemCenter">
+    <ul *ngIf="form.errors">
+      <li *ngIf="form.errors.dateRangeGreaterThanOneWeek">
+        <h2>{{ form.errors.dateRangeGreaterThanOneWeek.msg }} (given : {{ form.errors.dateRangeGreaterThanOneWeek.data
+          }} days)</h2>
+      </li>
+      <li *ngIf="form.errors.beginDateGreaterThanEndDate">
+        <h2>{{ form.errors.beginDateGreaterThanEndDate.msg }}</h2>
+      </li>
+      <li *ngIf="form.errors.endIndex">
+        <div *ngIf="form.errors.endIndex.min">
+          <h2>Match amount must be at least {{ form.errors.endIndex.min.min }} (given : {{
+            form.errors.endIndex.min.actual }})</h2>
+        </div>
+        <div *ngIf="form.errors.endIndex.max">
+          <h2>Match amount must be lower-than/equals {{ form.errors.endIndex.max.max }} (given : {{
+            form.errors.endIndex.max.actual }})</h2>
+        </div>
+      </li>
+      <li *ngIf="form.errors.beginIndex">
+        <div *ngIf="form.errors.beginIndex.min">
+          <h2>Begin must be at least {{ form.errors.beginIndex.min.min }} (given : {{
+            form.errors.beginIndex.min.actual }})</h2>
+        </div>
+        <div *ngIf="form.errors.beginIndex.max">
+          <h2>Begin must be lower-than/equals {{ form.errors.beginIndex.max.max }} (given : {{
+            form.errors.beginIndex.max.actual }})</h2>
+        </div>
+      </li>
+      <li *ngIf="form.errors.name">
+        <h2>Summoner Name is missing</h2>
+      </li>
+    </ul>
+  </div>
 </div>

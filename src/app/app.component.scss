@@ -66,3 +66,7 @@ button {
 :host ::ng-deep .justifyContentSpaceBetween {
   justify-content: space-between;
 }
+
+:host ::ng-deep .alignItemCenter {
+  align-items: center;
+}
