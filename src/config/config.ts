@@ -68,5 +68,8 @@ export const CONFIG: any = {
     noPlayerGivenMessage: 'No player given',
     dateRangeGreaterThanOneWeek: `Time range can't be greater than 1 week`,
     beginDateGreaterThanEndDate: `Begin time can't be greater than End Time`,
-  }
+  },
+  maxIndexValue: 100,
+  minTimeScale: 9,
+  minIndexScale: 15,
 }

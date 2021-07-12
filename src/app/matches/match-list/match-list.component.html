@@ -37,11 +37,17 @@
     </form>
     <div id="queryVisualizer" class="flex space-around">
       <div id="timeLadder">
-        <div>
+        <div *ngIf="form.controls.beginTime.value || form.controls.endTime.value">
           Today ({{ today | date:'dd/MM/YYYY' }})
         </div>
-        <div>
+        <div *ngIf="form.controls.beginTime.value || form.controls.endTime.value">
           Past ({{ defaultMinDate | date:'dd/MM/YYYY' }})
+        </div>
+        <div *ngIf="!form.controls.beginTime.value && !form.controls.endTime.value">
+          Latest ({{ form.controls.beginIndex.value }})
+        </div>
+        <div *ngIf="!form.controls.beginTime.value && !form.controls.endTime.value">
+          Oldest ({{ maxIndex }})
         </div>
       </div>
       <div class="selectionRange flex">
@@ -57,11 +63,17 @@
           <div [@queryVisuLabelOpacity]="queryVisuLabelVisible ? 'visible' : 'invisible'">
             {{ form.controls.endTime.value | date:'dd/MM/YYYY' }}
           </div>
-          <div class="textAlignCenter" [@queryVisuLabelOpacity]="queryVisuLabelVisible ? 'visible' : 'invisible'">
+          <div [@queryVisuLabelOpacity]="!isTimeQuery() ? 'visible' : 'invisible'">
+            {{ CONFIG.matchStartIndex }}
+          </div>
+          <div class="textAlignCenter" [@queryVisuLabelOpacity]="queryVisuLabelVisible || !isTimeQuery() ? 'visible' : 'invisible'">
             matches
           </div>
           <div [@queryVisuLabelOpacity]="queryVisuLabelVisible ? 'visible' : 'invisible'">
             {{ form.controls.beginTime.value | date:'dd/MM/YYYY' }}
+          </div>
+          <div [@queryVisuLabelOpacity]="!isTimeQuery() ? 'visible' : 'invisible'">
+            {{ form.controls.endIndex.value }}
           </div>
         </div>
       </div>

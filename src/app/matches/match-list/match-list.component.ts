@@ -59,6 +59,7 @@ registerLocaleData(localeFr);
 })
 export class MatchListComponent implements OnInit, AfterViewInit {
   CREDENTIALS = environment.CREDENTIALS
+  CONFIG = CONFIG
   matches: RiotGames.Match.MatchDetail[] = []
   matchesToCSV: MatchToCSV[] = []
   form: FormGroup
@@ -71,6 +72,7 @@ export class MatchListComponent implements OnInit, AfterViewInit {
   marginBot: number = 0
   height: number = 0
   queryVisuLabelVisible: boolean = false
+  maxIndex = CONFIG.maxIndexValue
 
   constructor(
     private matchService: MatchesService,
@@ -85,14 +87,17 @@ export class MatchListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.maxHeight = this.timeSelection?.nativeElement.offsetHeight
+    setTimeout(() => {
+      this.height = this.getHeightMatches()
+    })
   }
 
   ngOnInit() {
 
     this.form = new FormGroup({
       name: new FormControl(null, [Validators.required]),
-      beginIndex: new FormControl(CONFIG.matchStartIndex, [Validators.max(0), Validators.min(-100)]),
-      endIndex: new FormControl(environment.matchAmount, [Validators.min(0), Validators.max(100)]),
+      beginIndex: new FormControl(CONFIG.matchStartIndex, [Validators.max(0), Validators.min(-CONFIG.maxIndexValue)]),
+      endIndex: new FormControl(environment.matchAmount, [Validators.min(0), Validators.max(CONFIG.maxIndexValue)]),
       beginTime: new FormControl(null, [Validators.max(this.today.getTime())]),
       endTime: new FormControl(null, [Validators.max(this.today.getTime())]),
     },
@@ -106,7 +111,35 @@ export class MatchListComponent implements OnInit, AfterViewInit {
     this.form.valueChanges.subscribe(data => {
       let errors: any = {...this.form.errors, ...CoreService.collectFormErrors(this.form)}
       this.form.setErrors(Object.keys(errors).length !== 0 ? errors : null)
-      console.log(this.form.errors)
+      console.warn(this.form.errors)
+    })
+
+    this.form.controls.beginIndex.valueChanges.pipe(
+      startWith(undefined), 
+      pairwise()
+    ).subscribe(valuesArray => {
+      const newVal = valuesArray[1];
+      const oldVal = valuesArray[0];
+      if (newVal !== oldVal) {
+        this.adaptScale()
+        this.marginTop = this.getMarginTopPx(this.form.controls.endTime.value)
+        this.height = this.getHeightMatches()
+        this.queryVisuLabelVisible = this.updateMatchesLabelState()
+      }
+    })
+
+    this.form.controls.endIndex.valueChanges.pipe(
+      startWith(undefined), 
+      pairwise()
+    ).subscribe(valuesArray => {
+      const newVal = valuesArray[1];
+      const oldVal = valuesArray[0];
+      if (newVal !== oldVal) {
+        this.adaptScale()
+        this.marginTop = this.getMarginTopPx(this.form.controls.endTime.value)
+        this.height = this.getHeightMatches()
+        this.queryVisuLabelVisible = this.updateMatchesLabelState()
+      }
     })
 
     this.form.controls.beginTime.valueChanges.pipe(
@@ -210,7 +243,12 @@ export class MatchListComponent implements OnInit, AfterViewInit {
     let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultMinDate))
     let dayDiffThanToday = Math.round(CoreService.getDayDiff(this.today, date))
     let maxHeight = this.timeSelection?.nativeElement.offsetHeight
+    let beginIndex = this.form.controls.beginIndex.value
+    let endIndex = this.form.controls.endIndex.value
     if (!date) {
+      if (true) {
+        
+      }
       return 0
     }
     return Math.round(Math.abs(dayDiffThanToday * maxHeight / maxDays))
@@ -219,12 +257,15 @@ export class MatchListComponent implements OnInit, AfterViewInit {
   getHeightMatches() {
     let beginDate = this.form.controls.beginTime.value
     let endDate = this.form.controls.endTime.value
+    let beginIndex = this.form.controls.beginIndex.value
+    let endIndex = this.form.controls.endIndex.value
     let dayDiff = Math.round(CoreService.getDayDiff(beginDate, endDate))
     let maxDays = Math.round(CoreService.getDayDiff(this.today, this.defaultMinDate))
     let maxHeight = this.timeSelection?.nativeElement.offsetHeight
 
     if (!beginDate && !endDate) {
-      return 0
+      let indexDiff = (endIndex - Math.abs(beginIndex))
+      return indexDiff * maxHeight / this.maxIndex
     }
 
     if (beginDate && !endDate) {
@@ -267,7 +308,23 @@ export class MatchListComponent implements OnInit, AfterViewInit {
   adaptScale() {
     let beginTime: Date = this.form.controls.beginTime.value
     let endTime: Date = this.form.controls.endTime.value
+    let beginIndex: number = this.form.controls.beginIndex.value
+    let endIndex: number = this.form.controls.endIndex.value
     let beginEndTimeDayDiff
+    if (!beginTime && !endTime) {
+      if (endIndex) {
+        if (endIndex > this.maxIndex) {
+          this.maxIndex = endIndex
+        }
+      }
+      if ((endIndex || endIndex === 0) && (beginIndex || beginIndex === 0)) {
+        if (endIndex - Math.abs(beginIndex) <= CONFIG.minIndexScale) {
+          this.maxIndex = endIndex + endIndex - Math.abs(beginIndex) 
+        } else {
+          this.maxIndex = endIndex > CONFIG.minIndexScale ? CONFIG.maxIndexValue : endIndex
+        }
+      }
+    }
     if (endTime) {
       if (endTime < this.defaultMinDate) {
         this.defaultMinDate = endTime
@@ -275,11 +332,17 @@ export class MatchListComponent implements OnInit, AfterViewInit {
     }
     if (beginTime && endTime) {
       beginEndTimeDayDiff = Math.abs(CoreService.getDayDiff(beginTime, endTime))
-      if(beginEndTimeDayDiff <= 9) {
+      if(beginEndTimeDayDiff <= CONFIG.minTimeScale) {
         let endTimeTodayDiff = Math.abs(CoreService.getDayDiff(endTime, this.today))
         let result = new Date(beginTime.setDate(beginTime.getDate() - endTimeTodayDiff))
         this.defaultMinDate = result
+      } else {
+        this.defaultMinDate = beginEndTimeDayDiff <= CONFIG.minTimeScale ? CONFIG.minTimeScale : beginTime
       }
     }
+  }
+
+  isTimeQuery(): boolean {
+    return (!!this.form.controls.beginTime.value || !!this.form.controls.endTime.value)
   }
 }
